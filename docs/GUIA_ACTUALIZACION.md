@@ -33,4 +33,4 @@ Reemplaza el archivo en `raw-assets/projects/<slug>/` conservando el nombre y ej
 
 ## Despliegue
 
-Cada `push` a `main` ejecuta `.github/workflows/deploy.yml` y publica en GitHub Pages. Si cambias el nombre del repositorio, actualiza `basePath` en `next.config.mjs`, `url` en `src/data/site.ts` y `scripts/serve.mjs`.
+`npm run build && npm run deploy` publica `out/` en la rama `gh-pages` y GitHub Pages lo sirve en https://juanxd2201.github.io/portfolio/. Si cambias el nombre del repositorio, actualiza `basePath` en `next.config.mjs`, `url` en `src/data/site.ts` y `scripts/serve.mjs`.

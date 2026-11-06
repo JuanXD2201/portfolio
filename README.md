@@ -33,9 +33,13 @@ Ver [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md). El contenido vive en `src/data
 
 ## Despliegue en GitHub Pages
 
-1. Crea el repositorio público `JuanXD2201/portfolio` y sube el código a `main`.
-2. En Settings → Pages, elige **Source: GitHub Actions**.
-3. El workflow `.github/workflows/deploy.yml` compila y publica en cada push.
+Publicado desde la rama `gh-pages` (Settings → Pages → Deploy from a branch).
+
+```bash
+npm run build && npm run deploy   # sube out/ a la rama gh-pages
+```
+
+`docs/deploy.yml.ejemplo` es un workflow de GitHub Actions equivalente. Para usarlo hay que copiarlo a `.github/workflows/deploy.yml` y renovar el token de `gh` con el permiso `workflow` (`gh auth refresh -s workflow`).
 
 Si el repositorio tiene otro nombre, cambia `basePath` en `next.config.mjs` y `url` en `src/data/site.ts`.
 
