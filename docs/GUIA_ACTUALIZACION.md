@@ -1,36 +1,58 @@
 # Guía de actualización
 
-Todo el contenido está en `src/data/`. Después de cualquier cambio: `npm run build && npm test`.
+Todo el contenido está en `src/data/`. Después de cualquier cambio: `npm run typecheck`, `npm run build` y `npm test`.
 
-## Agregar un proyecto
+## Datos personales, teléfono y correo
 
-1. Copia las capturas (PNG o JPG) a `raw-assets/projects/<slug>/`.
-2. Añade un objeto al arreglo `projects` de `src/data/projects.ts` (usa uno existente como plantilla). Sin capturas: deja `captures: []`, `captureKind: 'ninguna'` y rellena `preview` con salida real de comandos.
-3. `npm run build` optimiza las imágenes, regenera `images.json` y crea la página `/proyectos/<slug>/`, el sitemap, el filtro, la paleta y el grafo.
-4. Declara el estado real (`status`, `verified`, `limits`). No agregues métricas que no hayas medido.
+`src/data/site.ts`:
 
-## Modificar mis datos
+- `name`, `shortName`, `role`, `degree`, `location`, `headline`, `intro`, `availability`, `specialties`.
+- Teléfono: `phone` (formato internacional sin espacios, por ejemplo `+573123431825`, se usa en `tel:`), `phoneDisplay` (texto visible) y `whatsapp` (`https://wa.me/<número sin +>`).
+- Mensaje de WhatsApp: `whatsappMessage`; se codifica solo con `encodeURIComponent`.
+- Correo: `email`. GitHub: `github` y `githubUser`.
+- Si cambia la URL pública, actualiza `url` aquí y `basePath` en `next.config.mjs`.
 
-`src/data/site.ts`: nombre, descripción, titular, disponibilidad, trayectoria (`timeline`), especialidades (`services`) y las líneas de la terminal (`terminalLines`).
+## Hoja de vida y activos sociales
 
-## Agregar una tecnología
+1. Edita `about`, `timeline` y `stack` (el CV se genera a partir de ellos) y, si cambian los proyectos, la lista de proyectos de `scripts/make-assets.mjs`.
+2. Ejecuta `node scripts/make-assets.mjs`: regenera `public/cv/Juan_Esteban_Olaya_CV.pdf` y `public/og.png` (requiere Chrome). El CV no incluye teléfono.
+3. Para usar un PDF propio, reemplaza el archivo en `public/cv/` y mantén el nombre en `site.cvFile`.
 
-`src/data/stack.ts`: añade `{ name, proof }` al grupo correspondiente. `proof` debe indicar el proyecto o documento que la respalda.
+## Experiencia y formación
 
-## Actualizar mis redes
+`timeline.education` y `timeline.experience` en `site.ts`. Cada entrada lleva `start` (AAAA-MM, para ordenar), `period`, `title`, `org` y `text`. Se muestra solo la experiencia relevante para un perfil de desarrollador.
 
-`src/data/site.ts`: `email`, `github`, `githubUser`, `linkedin`.
+## Tecnologías
 
-## Cambiar imágenes
+`src/data/stack.ts`: agrega `{ name, proof }` al grupo correspondiente; `proof` debe nombrar un proyecto o repositorio real. Para que aparezca en el mapa radial, incluye el mismo nombre en `techs` del área correspondiente en `areas` (`site.ts`).
 
-Reemplaza el archivo en `raw-assets/projects/<slug>/` conservando el nombre y ejecuta `npm run build`. Para el dashboard del ESP32: `node scripts/capture-dashboard.mjs`.
+## Proyectos
 
-## Actualizar la hoja de vida
+1. Copia las capturas a `raw-assets/projects/<slug>/` (PNG o JPG).
+2. Añade un objeto a `projects` en `src/data/projects.ts` con `group` (`grado`, `lab` o `asignatura`), caso de estudio, `checks`, `tests` (número del README), `scope` y las capturas (`file`, `alt`, `caption`).
+3. Si el proyecto respalda una especialidad, añade su `slug` a `projects` del área en `areas` (`site.ts`).
+4. `npm run build` genera los WebP y `src/data/images.json`.
 
-1. Actualiza `timeline`, `about` y `stack` (el PDF se genera desde esos datos).
-2. `node scripts/make-assets.mjs` crea `public/cv/Juan_Esteban_Olaya_CV.pdf` y `public/og.png`. Requiere Chrome instalado (variable `CHROME_PATH` si está en otra ruta).
-3. Revisa el PDF antes de publicar: no debe incluir teléfono, cédula, dirección ni referencias.
+Los números de pruebas deben coincidir con los del README del proyecto. Las capturas renderizadas se describen con la nota «Pantallas renderizadas desde el código de la app».
+
+## Laboratorios y demos
+
+Para un laboratorio nuevo (por ejemplo `bodega`):
+
+1. En la carpeta del laboratorio: `npm ci` (si hace falta) y `npm run build`. Debe usar `base: './'`.
+2. Copia `dist/` a `public/labs/<slug>/` (las demos se versionan; el despliegue no compila nada más).
+3. Agrega la entrada en `projects.ts` con `group: 'lab'` y `lab: { path: 'labs/<slug>/' }`; el botón «Abrir demo», la paleta y los accesos rápidos de la portada se actualizan solos.
+4. Para actualizar una demo existente, repite los pasos 1 y 2 con la carpeta del mismo `slug`.
+5. `npm test` abre cada carpeta de `public/labs/` y comprueba consola, fuentes y WASM.
+
+## Imágenes e imagen social
+
+Las imágenes del sitio se optimizan desde `raw-assets/`. `public/og.png` se genera con `scripts/make-assets.mjs`; `public/favicon.svg` se edita a mano.
+
+## Enlaces
+
+Repositorio y demo externa de cada proyecto: campos `repo` y `demo` en `projects.ts`. `npm test` comprueba que todos los enlaces de la portada respondan.
 
 ## Despliegue
 
-`npm run build && npm run deploy` publica `out/` en la rama `gh-pages` y GitHub Pages lo sirve en https://juanxd2201.github.io/portfolio/. Si cambias el nombre del repositorio, actualiza `basePath` en `next.config.mjs`, `url` en `src/data/site.ts` y `scripts/serve.mjs`.
+`npm run build && npm run deploy` publica `out/` en la rama `gh-pages`. Alternativa con Actions: `docs/deploy.yml.ejemplo`.

@@ -1,37 +1,43 @@
 # Informe de pruebas
 
-Fecha: 2026-11-06. Entorno: Windows 10, Node 25.9, Chrome 64 bits, Next.js 15.3.8.
-
-## Qué se ejecutó
+Solo se registra lo que se ejecutó. Entorno: Windows, Node 25.9, Chrome instalado, build de producción servido desde `out/` bajo `/portfolio/`.
 
 | Comprobación | Comando | Resultado |
 |---|---|---|
-| Tipos | `npx tsc --noEmit` | 0 errores |
-| Compilación estática | `npx next build` | 13 páginas generadas, 113 kB de JS inicial en portada |
-| Auditoría del sitio exportado | `npm test` (`scripts/verify-site.mjs`, Playwright + Chrome) | 57 de 59 superadas; 2 fallos esperados (ver abajo) |
-| firestore-rules-lint | `npm test` en su repositorio | 11 de 11 |
-| postulaciones-api | `npm test` en su repositorio | 14 de 14 |
+| Tipos | `npx tsc --noEmit` | sin errores |
+| Build | `npm run build` | 14 páginas estáticas (portada, 8 casos de estudio, 404, robots, sitemap y rutas internas); 42 imágenes optimizadas |
+| JS de la ruta `/` | salida de `next build` | 124 kB de «First Load JS» (101 kB compartidos + 8,33 kB propios), gzip según Next |
+| Verificación del sitio | `npm test` | 150 de 150 comprobaciones superadas (última ejecución) |
 
-## Cobertura de `npm test` (sitio)
+## Qué cubre `npm test`
 
-- Estado HTTP, un solo `h1`, `title`, sin errores de consola y sin imágenes rotas en las 8 rutas y en la página 404.
-- Enlaces internos de la portada (9) y externos (GitHub, LinkedIn, demo ESP32).
-- Existencia de CV, `sitemap.xml`, `robots.txt` y `og.png`.
-- Filtros de proyectos, paleta de comandos (Ctrl+K, búsqueda y Enter), cambio de tema, enlace «Saltar al contenido» con Tab.
-- Sin scroll horizontal en 1920×1080, 1366×768, 768×1024 y 390×844; menú móvil abre en 390×844.
-- Capturas por viewport en `screenshots/` (ignorada por Git).
+- Rutas descubiertas desde `sitemap.xml` (portada y los 8 proyectos) y la 404: estado HTTP, consola sin errores ni peticiones fallidas, imágenes cargadas y con `width`/`height`, un solo `h1`, `title`, `description`, `canonical`, `og:image`, enlaces y botones con nombre accesible, y ausencia de palabras internas o de redes no usadas en el texto y el HTML.
+- Demos de `public/labs/*` (Ledger e InjectionLab): HTTP 200, sin errores de consola ni recursos fallidos, contenido renderizado, fuentes cargadas y WASM servido como `application/wasm`.
+- Portada: enlaces internos y externos, CV, sitemap, robots, `og.png` y favicon; `tel:+573123431825`, `wa.me/573123431825` con mensaje en español, `mailto:`, botones de copiar con confirmación `role="status"` y contenido del portapapeles; descarga del CV; filtros; botones «Abrir demo»; mapa de especialidades con teclado; paleta Ctrl+K (proyectos, laboratorios, contacto, tema y WhatsApp); cambio de tema; «Saltar al contenido»; progreso de lectura; «volver arriba».
+- Responsive en 1920×1080, 1366×768, 768×1024 y 390×844 para la portada y dos casos de estudio: sin scroll horizontal y sin solapamientos entre textos, enlaces y botones; menú móvil.
+- `prefers-reduced-motion`: carga sin errores y con el núcleo dibujado.
 
-## Fallos y su causa
+## Rendimiento (Chrome headless, equipo con Celeron N4020 y 4 GB)
 
-Los dos fallos son enlaces a `firestore-rules-lint` y `postulaciones-api` en GitHub (404): los repositorios aún no estaban publicados cuando se ejecutó la auditoría. Se resuelven al publicarlos.
+Medido con la API de Performance durante `npm test` (última ejecución):
 
-LinkedIn responde 999 a clientes automatizados; se trata como válido porque no indica un enlace roto.
+| Métrica | Valor |
+|---|---|
+| JS transferido en la portada (sin comprimir) | 413 KB |
+| Peso total de la portada sin imágenes diferidas | 705 KB |
+| FCP / LCP | 1000 ms / 1332 ms |
+| CLS | 0,000 |
+| Tiempo en tareas largas durante la carga | 254 ms (entre 254 y 512 ms según la ejecución) |
+| Fotogramas por segundo con el núcleo animado | 60,5 |
 
-## Verificado por el autor
+No se ejecutó Lighthouse. Las cifras de rendimiento provienen de una sola máquina y varían entre ejecuciones.
 
-El autor verificó por su cuenta el funcionamiento de los proyectos mostrados.
+## Revisión visual
 
-## Revisión adicional
+Las capturas de `screenshots/` (carpeta ignorada por Git) se revisaron una por una en los cuatro tamaños, en tema oscuro y claro, y se corrigieron: etiquetas del núcleo recortadas en pantallas pequeñas, espaciado de los casos de estudio, imágenes altas de los laboratorios y cabeceras de sección sin color de acento.
 
-- Revisión visual de la portada en 1366×768, 1920×1080 (página completa) y 390×844.
-- El PDF del CV no contiene teléfono, cédula, dirección ni referencias (búsqueda de esas cadenas en el texto extraído: 0 coincidencias).
+## No verificado
+
+- Accesibilidad con lector de pantalla y contraste medido con herramienta externa (el diseño usa pares de color AA por construcción, sin auditoría automática).
+- Navegadores distintos de Chrome.
+- Fotogramas por segundo en hardware sin aceleración distinta de la del equipo de desarrollo.
