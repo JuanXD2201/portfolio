@@ -1,0 +1,29 @@
+.card { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); transition: border-color .2s, transform .2s; }
+.card:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); transform: translateY(-2px); }
+.media { display: block; border-radius: 12px; overflow: hidden; background: var(--bg-2); border: 1px solid var(--line); aspect-ratio: 9/16; max-height: 360px; }
+.media img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .5s; }
+.card:hover .media img { transform: scale(1.03); }
+.wide .media { aspect-ratio: 16/10; align-self: start; }
+.body { display: grid; align-content: start; gap: 10px; min-width: 0; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.idx { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin-right: 4px; }
+.name { font-size: 1.5rem; }
+.name a:hover { color: var(--accent); }
+.tag { color: var(--muted); }
+.status { font-size: .82rem; font-family: var(--mono); padding-left: 12px; border-left: 2px solid var(--accent); }
+.wip { border-color: var(--warn); }
+.stack { display: flex; flex-wrap: wrap; gap: 6px; font-family: var(--mono); font-size: .74rem; color: var(--muted); }
+.stack li::after { content: '·'; margin-left: 6px; }
+.stack li:last-child::after { content: ''; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.links :global(.btn) { min-height: 40px; padding: 0 16px; }
+@media (max-width: 700px) {
+  .card { grid-template-columns: 1fr; padding: 16px; }
+  .media, .wide .media { aspect-ratio: 16/11; max-height: 280px; }
+}
+.term { display: block; border-radius: 12px; border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 85%, #000); padding: 14px; font: .72rem/1.65 var(--mono); color: var(--muted); overflow: hidden; align-self: start; }
+.term b { color: var(--accent); font-weight: 500; display: block; margin-bottom: 6px; }
+.term span { display: block; white-space: pre-wrap; word-break: break-word; }
+.badge { font: .68rem var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--warn); border: 1px solid color-mix(in srgb, var(--warn) 50%, transparent); padding: 2px 8px; border-radius: 999px; }
+.wide { grid-template-columns: 300px 1fr; }
+@media (max-width: 700px) { .wide { grid-template-columns: 1fr; } }

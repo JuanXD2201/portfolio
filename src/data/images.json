@@ -1,0 +1,106 @@
+{
+  "asistenteia/01_inicio_windows": {
+    "width": 884,
+    "height": 692
+  },
+  "asistenteia/android_02_configuracion_validada": {
+    "width": 540,
+    "height": 1145
+  },
+  "asistenteia/android_03_consulta_respuesta": {
+    "width": 540,
+    "height": 1145
+  },
+  "asistenteia/android_04_historial": {
+    "width": 540,
+    "height": 1145
+  },
+  "asistenteia/android_12_modelos_cargados": {
+    "width": 540,
+    "height": 1145
+  },
+  "asistenteia/arquitectura": {
+    "width": 1200,
+    "height": 431
+  },
+  "dogcare/02_calculadora_edad": {
+    "width": 540,
+    "height": 1202
+  },
+  "dogcare/03_chat_ia": {
+    "width": 540,
+    "height": 1202
+  },
+  "dogcare/04_veterinarias": {
+    "width": 540,
+    "height": 1202
+  },
+  "dogcare/05_tienda": {
+    "width": 540,
+    "height": 1202
+  },
+  "dogcare/07_pago_simulado": {
+    "width": 540,
+    "height": 1202
+  },
+  "dogcare/arquitectura": {
+    "width": 1200,
+    "height": 734
+  },
+  "elmercado10/04_catalogo": {
+    "width": 540,
+    "height": 1202
+  },
+  "elmercado10/06_detalle_producto": {
+    "width": 540,
+    "height": 1202
+  },
+  "elmercado10/08_carrito": {
+    "width": 540,
+    "height": 1202
+  },
+  "elmercado10/10_pedidos_vendedor": {
+    "width": 540,
+    "height": 1202
+  },
+  "elmercado10/14_chat_detalle": {
+    "width": 540,
+    "height": 1202
+  },
+  "elmercado10/arquitectura": {
+    "width": 1200,
+    "height": 727
+  },
+  "esp32-dashboard/dashboard": {
+    "width": 1200,
+    "height": 750
+  },
+  "servix/03_home": {
+    "width": 540,
+    "height": 1202
+  },
+  "servix/04_clientes": {
+    "width": 540,
+    "height": 1202
+  },
+  "servix/07_servicio_detalle": {
+    "width": 540,
+    "height": 1202
+  },
+  "servix/10_chat_ia_admin": {
+    "width": 540,
+    "height": 1202
+  },
+  "servix/15_portal_cliente": {
+    "width": 540,
+    "height": 1202
+  },
+  "servix/16_escalamientos_admin": {
+    "width": 540,
+    "height": 1202
+  },
+  "servix/arquitectura": {
+    "width": 1200,
+    "height": 734
+  }
+}

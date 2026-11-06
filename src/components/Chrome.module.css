@@ -1,0 +1,30 @@
+.nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.navIn { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; }
+.mark { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-family: var(--mono); font-size: .8rem; font-weight: 700; }
+.menu { display: flex; gap: 4px; }
+.menu a { padding: 8px 12px; border-radius: 8px; color: var(--muted); font-size: .92rem; transition: color .15s, background .15s; }
+.menu a:hover { color: var(--text); background: var(--surface); }
+.actions { display: flex; gap: 8px; }
+.iconBtn { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; }
+.iconBtn:hover { border-color: var(--muted); }
+.burger { display: none; }
+@media (max-width: 760px) {
+  .burger { display: grid; }
+  .menu { position: absolute; inset: 64px 0 auto 0; flex-direction: column; padding: 12px var(--gutter) 20px; background: var(--bg); border-bottom: 1px solid var(--line); display: none; }
+  .menu.open { display: flex; }
+  .menu a { padding: 14px 8px; font-size: 1.05rem; }
+  .brandName { display: none; }
+}
+.footer { border-top: 1px solid var(--line); padding-block: 40px; color: var(--muted); font-size: .92rem; }
+.footIn { display: grid; gap: 20px; grid-template-columns: 1fr auto; align-items: start; }
+.footIn strong { color: var(--text); }
+.footLinks { display: flex; gap: 18px; }
+.footLinks a:hover { color: var(--accent); }
+.copy { grid-column: 1 / -1; font-size: .82rem; }
+@media (max-width: 600px) { .footIn { grid-template-columns: 1fr; } }
+.toTop { position: fixed; right: 18px; bottom: 18px; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-size: 1.1rem; cursor: pointer; z-index: 40; }
+.toTop:hover { border-color: var(--accent); color: var(--accent); }
+.kbd { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: .75rem var(--mono); cursor: pointer; }
+.kbd:hover { border-color: var(--muted); color: var(--text); }
+@media (max-width: 760px) { .kbd span { display: none; } .kbd { width: 40px; justify-content: center; padding: 0; } }
