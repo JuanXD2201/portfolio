@@ -7,3 +7,4 @@ screenshots/
 *.log
 *.tsbuildinfo
 .DS_Store
+scripts/_*.mjs

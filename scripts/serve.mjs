@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png', '.pdf': 'application/pdf', '.txt': 'text/plain', '.xml': 'application/xml', '.woff2': 'font/woff2', '.ico': 'image/x-icon' };
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png', '.pdf': 'application/pdf', '.txt': 'text/plain', '.xml': 'application/xml', '.woff2': 'font/woff2', '.ico': 'image/x-icon', '.wasm': 'application/wasm', '.woff': 'font/woff', '.ttf': 'font/ttf', '.mjs': 'text/javascript', '.map': 'application/json', '.jpg': 'image/jpeg', '.gif': 'image/gif' };
 const BASE = '/portfolio';
 
 export function startServer(port = 4173, root = 'out') {
