@@ -1,8 +1,8 @@
 .overlay { position: fixed; inset: 0; z-index: 90; background: color-mix(in srgb, #000 60%, transparent); backdrop-filter: blur(4px); display: grid; align-items: start; justify-items: center; padding: 14vh 16px 16px; }
-.box { width: min(560px, 100%); border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: 0 30px 80px -20px #000; overflow: hidden; }
+.box { width: min(560px, 100%); border: 1px solid var(--line-strong); border-radius: 4px; background: var(--panel); box-shadow: 0 30px 80px -20px #000; overflow: hidden; }
 .input { width: 100%; padding: 16px 18px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--text); font: 1rem var(--mono); outline: none; }
 .list { max-height: 50vh; overflow: auto; padding: 6px; }
-.list li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 8px; cursor: pointer; }
+.list li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 3px; cursor: pointer; }
 .list li small { color: var(--muted); font-family: var(--mono); font-size: .74rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .on { background: color-mix(in srgb, var(--accent) 16%, transparent); outline: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); }
 .empty { color: var(--muted); cursor: default !important; }

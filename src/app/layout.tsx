@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import '@fontsource-variable/geist';
 import '@fontsource-variable/geist-mono';
+import '@fontsource/chakra-petch/500.css';
+import '@fontsource/chakra-petch/600.css';
+import '@fontsource/chakra-petch/700.css';
 import '../styles/global.css';
 import { site } from '../data/site';
 import { Header, Footer, ClientEffects } from '../components/Chrome';
@@ -24,7 +27,7 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', images: [`${origin}/og.png`] },
 };
 
-export const viewport: Viewport = { themeColor: '#0b0c0f', width: 'device-width', initialScale: 1 };
+export const viewport: Viewport = { themeColor: '#04070d', width: 'device-width', initialScale: 1 };
 
 const personLd = {
   '@context': 'https://schema.org',
@@ -32,7 +35,8 @@ const personLd = {
   name: site.name,
   jobTitle: site.role,
   url: `${origin}/`,
-  sameAs: [site.github, site.linkedin],
+  sameAs: [site.github],
+  description: site.description,
   alumniOf: 'Universidad de San Buenaventura',
 };
 

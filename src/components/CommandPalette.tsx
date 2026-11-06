@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
-import { nav, site } from '../data/site';
-import { projects } from '../data/projects';
+import { nav, site, whatsappLink } from '../data/site';
+import { projects, labs, labUrl, groupLabel } from '../data/projects';
+import { asset } from '../lib/paths';
 import s from './CommandPalette.module.css';
 
 interface Item { label: string; hint: string; run: () => void }
@@ -18,12 +19,21 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
   const items: Item[] = useMemo(() => {
     const go = (path: string) => () => router.push(path);
     const ext = (u: string) => () => window.open(u, '_blank', 'noopener');
+    const toggleTheme = () => {
+      const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch { /* almacenamiento no disponible */ }
+    };
     return [
       ...nav.map((n) => ({ label: n.label, hint: 'Ir a sección', run: go(`/${n.href}`) })),
-      ...projects.map((p) => ({ label: p.name, hint: 'Proyecto', run: go(`/proyectos/${p.slug}/`) })),
-      { label: 'GitHub', hint: site.githubUser, run: ext(site.github) },
-      { label: 'LinkedIn', hint: 'Perfil', run: ext(site.linkedin) },
+      ...projects.map((p) => ({ label: p.name, hint: groupLabel[p.group].title.replace('Proyectos de ', 'Proyecto de '), run: go(`/proyectos/${p.slug}/`) })),
+      ...labs.map((p) => ({ label: `Demo de ${p.name}`, hint: 'Laboratorio', run: () => { location.href = labUrl(p)!; } })),
+      { label: 'Contacto por WhatsApp', hint: site.phoneDisplay, run: ext(whatsappLink) },
+      { label: 'Llamar', hint: site.phoneDisplay, run: () => { location.href = `tel:${site.phone}`; } },
       { label: 'Escribir correo', hint: site.email, run: () => { location.href = `mailto:${site.email}`; } },
+      { label: 'GitHub', hint: site.githubUser, run: ext(site.github) },
+      { label: 'Descargar hoja de vida', hint: 'PDF', run: () => { location.href = asset(site.cvFile); } },
+      { label: 'Cambiar tema claro/oscuro', hint: 'Apariencia', run: toggleTheme },
     ];
   }, [router]);
 

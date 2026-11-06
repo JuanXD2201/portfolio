@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { site, nav } from '../data/site';
 import { CommandPalette } from './CommandPalette';
@@ -20,10 +21,8 @@ export function Header() {
   }, []);
 
   const toggleTheme = () => {
-    const root = document.documentElement;
-    const cur = root.dataset.theme ?? 'dark'; // el tema oscuro es el predeterminado
-    const next = cur === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = next;
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
     try { localStorage.setItem('theme', next); } catch { /* almacenamiento no disponible */ }
   };
 
@@ -31,7 +30,11 @@ export function Header() {
     <header className={s.nav}>
       <div className={`wrap ${s.navIn}`}>
         <Link className={s.brand} href="/" aria-label={`${site.name}, inicio`}>
-          <span className={s.mark} aria-hidden="true">JO</span>
+          <svg className={s.mark} width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="1.5" strokeDasharray="60 28" />
+            <circle cx="16" cy="16" r="8.5" stroke="currentColor" strokeWidth="1" opacity=".6" />
+            <circle cx="16" cy="16" r="2.6" fill="currentColor" />
+          </svg>
           <span className={s.brandName}>{site.shortName}</span>
         </Link>
         <nav aria-label="Principal" id="menu" className={`${s.menu} ${open ? s.open : ''}`}>
@@ -63,12 +66,12 @@ export function Footer() {
       <div className={`wrap ${s.footIn}`}>
         <div>
           <strong>{site.name}</strong>
-          <p>{site.role} · Android, Firebase, .NET MAUI</p>
+          <p>{site.role} · Android, web, Firebase y .NET MAUI</p>
         </div>
         <ul className={s.footLinks}>
           <li><a href={site.github} rel="noopener">GitHub</a></li>
-          <li><a href={site.linkedin} rel="noopener">LinkedIn</a></li>
           <li><a href={`mailto:${site.email}`}>Correo</a></li>
+          <li><Link href="/#contacto">Contacto</Link></li>
         </ul>
         {/* El año se calcula en el navegador para que el sitio estático no quede desactualizado. */}
         <p className={s.copy}>© <Year /> {site.name}. Todos los derechos reservados.</p>
@@ -83,34 +86,72 @@ function Year() {
   return <span suppressHydrationWarning>{y}</span>;
 }
 
-/** Barra de progreso, botón "volver arriba" y animaciones de entrada. */
+/** Progreso de lectura, riel de secciones, botón «volver arriba» y trazado de las cabeceras de sección. */
 export function ClientEffects() {
+  const pathname = usePathname();
+  const home = pathname === '/';
   const [showTop, setShowTop] = useState(false);
+  const [active, setActive] = useState<string>('inicio');
 
   useEffect(() => {
     const root = document.documentElement;
     const bar = document.getElementById('progress');
+    let raf = 0;
     const onScroll = () => {
-      const h = root.scrollHeight - root.clientHeight;
-      if (bar) bar.style.transform = `scaleX(${h > 0 ? root.scrollTop / h : 0})`;
-      setShowTop(root.scrollTop > 700);
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const h = root.scrollHeight - root.clientHeight;
+        if (bar) bar.style.transform = `scaleX(${h > 0 ? root.scrollTop / h : 0})`;
+        setShowTop(root.scrollTop > 700);
+      });
     };
     addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    const io = new IntersectionObserver(
-      (es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }),
-      { threshold: 0.12 },
+    const heads = new IntersectionObserver(
+      (es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); heads.unobserve(e.target); } }),
+      { threshold: 0.3 },
     );
-    const observe = () => document.querySelectorAll('.reveal:not(.in)').forEach((el) => io.observe(el));
+    const observe = () => document.querySelectorAll('.sec-head:not(.in)').forEach((el) => heads.observe(el));
     observe();
     const mo = new MutationObserver(observe);
     mo.observe(document.getElementById('main')!, { childList: true, subtree: true });
 
-    return () => { removeEventListener('scroll', onScroll); io.disconnect(); mo.disconnect(); };
-  }, []);
+    return () => { removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); heads.disconnect(); mo.disconnect(); };
+  }, [pathname]);
 
-  return showTop ? (
-    <button className={s.toTop} type="button" aria-label="Volver arriba" onClick={() => scrollTo({ top: 0 })}>↑</button>
-  ) : null;
+  useEffect(() => {
+    if (!home) return;
+    const ids = nav.map((n) => n.href.slice(1));
+    const spy = new IntersectionObserver(
+      (es) => es.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); }),
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    ids.forEach((id) => { const el = document.getElementById(id); if (el) spy.observe(el); });
+    return () => spy.disconnect();
+  }, [home]);
+
+  return (
+    <>
+      {home && (
+        <nav className={s.rail} aria-label="Secciones de la página">
+          <ol>
+            {nav.map((n) => {
+              const id = n.href.slice(1);
+              return (
+                <li key={id}>
+                  <a href={n.href} aria-current={active === id ? 'location' : undefined}><span>{n.label}</span><i aria-hidden="true" /></a>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+      )}
+      {showTop && (
+        <button className={s.toTop} type="button" aria-label="Volver arriba" onClick={() => scrollTo({ top: 0 })}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+        </button>
+      )}
+    </>
+  );
 }

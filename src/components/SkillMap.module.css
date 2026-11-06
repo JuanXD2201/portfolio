@@ -1,0 +1,43 @@
+.root { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 24px; align-items: start; }
+.mapWrap { display: grid; gap: 10px; }
+.svg { width: 100%; height: auto; overflow: visible; }
+.svg text { paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.ring { fill: none; stroke: var(--line); stroke-width: 1; }
+.edge { stroke: var(--line); stroke-width: 1; transition: stroke .2s; }
+.edgeOn { stroke: var(--accent); stroke-width: 1.5; }
+.hub { fill: var(--panel); stroke: var(--line-strong); }
+.hubText { fill: var(--accent); font: 600 16px var(--display); }
+.pnode circle { fill: var(--panel); stroke: var(--muted); stroke-width: 1.5; transition: all .2s; }
+.pnode text { fill: var(--muted); font: 12.5px var(--mono); }
+.pOn circle { stroke: var(--accent); fill: var(--accent); }
+.pOn text { fill: var(--text); }
+.pnode:hover text, .pnode:focus-visible text { fill: var(--accent); }
+.anode { cursor: pointer; outline: none; }
+.anode circle { fill: var(--panel-2); stroke: var(--line-strong); stroke-width: 1.5; transition: all .2s; }
+.anode text { fill: var(--text); font: 600 14px var(--display); }
+.anode .alabel { font: 12.5px var(--font); fill: var(--muted); font-weight: 500; }
+.aOn circle { stroke: var(--accent); fill: var(--deep); }
+.aOn .alabel { fill: var(--text); }
+.anode:focus-visible circle { stroke: var(--accent); stroke-width: 3; }
+.note { color: var(--muted); font-size: .82rem; }
+
+.panelDetail { padding: 24px; position: sticky; top: 92px; }
+.detail { display: grid; gap: 12px; }
+.detail h3 { font-size: 1.35rem; }
+.detail > p { color: var(--muted); font-size: .94rem; }
+.detail h4 { font: .78rem var(--mono); color: var(--accent); margin-top: 6px; }
+.techs { display: grid; gap: 6px; }
+.techs li { display: grid; gap: 0; border-left: 2px solid var(--line-strong); padding-left: 10px; }
+.techs span { font-size: .92rem; }
+.techs small { color: var(--muted); font-size: .76rem; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; }
+.links a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 3px; font-size: .86rem; }
+.links a:hover { border-color: var(--accent); background: var(--glow); }
+
+.mobile { display: none; gap: 14px; }
+.mItem { padding: 20px; }
+@media (max-width: 860px) {
+  .root { grid-template-columns: 1fr; }
+  .mapWrap, .panelDetail { display: none; }
+  .mobile { display: grid; }
+}

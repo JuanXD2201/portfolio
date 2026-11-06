@@ -1,40 +1,88 @@
 import Link from 'next/link';
-import { img, kindLabel, type Project } from '../data/projects';
+import { img, kindLabel, labUrl, type Project } from '../data/projects';
 import s from './ProjectCard.module.css';
 
-export function ProjectCard({ project: p, index }: { project: Project; index: number }) {
-  const first = p.captures[0];
-  const cover = first ? img(p.slug, first.file) : null;
-  const href = `/proyectos/${p.slug}/`;
+const href = (p: Project) => `/proyectos/${p.slug}/`;
+
+function Shot({ p, i, eager = false }: { p: Project; i: number; eager?: boolean }) {
+  const c = p.captures[i];
+  if (!c) return null;
+  const im = img(p.slug, c.file);
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={im.src} width={im.width} height={im.height} alt={c.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />;
+}
+
+function Links({ p }: { p: Project }) {
+  const demo = labUrl(p);
   return (
-    <article className={`${s.card} ${p.layout === 'wide' ? s.wide : ''}`} data-kinds={p.kind.join(' ')}>
-      {cover && first ? (
-        <Link className={s.media} href={href} aria-label={`Ver detalle de ${p.name}`} tabIndex={-1}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={cover.src} width={cover.width} height={cover.height} alt={first.alt} loading={index < 2 ? 'eager' : 'lazy'} decoding="async" />
-        </Link>
-      ) : (
-        <Link className={s.term} href={href} aria-label={`Ver detalle de ${p.name}`} tabIndex={-1}>
-          <b>{p.preview?.title}</b>
-          {p.preview?.lines.slice(0, 5).map((l, i) => <span key={i}>{l || ' '}</span>)}
-        </Link>
-      )}
-      <div className={s.body}>
-        <p className={s.meta}>
-          <span className={s.idx}>{String(index + 1).padStart(2, '0')}</span>
-          {p.kind.map((k) => <span key={k} className="chip">{kindLabel[k]}</span>)}
-          {p.thesis && <span className={s.thesis}>Proyecto de grado</span>}
-          {p.complementary && <span className={s.badge}>Complementario</span>}
-        </p>
-        <h3 className={s.name}><Link href={href}>{p.name}</Link></h3>
-        <p className={s.tag}>{p.tagline}</p>
-        <p className={`${s.status} ${p.statusTone === 'wip' ? s.wip : ''}`}>{p.status}</p>
-        <ul className={s.stack}>{p.stack.slice(0, 5).map((t) => <li key={t}>{t}</li>)}</ul>
-        <div className={s.links}>
-          <Link className="btn btn-primary" href={href}>Ver caso</Link>
-          <a className="btn" href={p.repo} rel="noopener">Repositorio</a>
-          {p.demo && <a className="btn" href={p.demo} rel="noopener">Demo</a>}
-        </div>
+    <div className={s.links}>
+      {demo && <a className="btn btn-primary" href={demo} aria-label={`Abrir demo de ${p.name}`}>Abrir demo</a>}
+      <Link className={demo ? 'btn' : 'btn btn-primary'} href={href(p)} aria-label={`Ver caso de estudio de ${p.name}`}>Ver caso</Link>
+      <a className="btn" href={p.repo} rel="noopener" target="_blank" aria-label={`Repositorio de ${p.name} en GitHub`}>Repositorio</a>
+      {p.demo && <a className="btn" href={p.demo} rel="noopener" target="_blank" aria-label={`Demo en línea de ${p.name}`}>Demo en línea</a>}
+    </div>
+  );
+}
+
+/** Cartel grande para los proyectos de grado. */
+export function PosterCard({ p, priority }: { p: Project; priority?: boolean }) {
+  const phone = p.layout === 'phone';
+  return (
+    <article className={`panel ${s.poster}`} data-kinds={p.kind.join(' ')}>
+      <div className={s.posterInfo}>
+        <p className="tag">Proyecto de grado · {p.kind.map((k) => kindLabel[k]).join(' · ')}</p>
+        <h3 className={s.posterName}><Link href={href(p)}>{p.name}</Link></h3>
+        <p className={s.posterTag}>{p.tagline}</p>
+        <p className={s.summary}>{p.summary}</p>
+        <p className={s.status}><span className={s.dot} aria-hidden="true" />{p.status}</p>
+        <ul className={s.stack}>{p.stack.slice(0, 7).map((t) => <li key={t} className="chip">{t}</li>)}</ul>
+        <Links p={p} />
+      </div>
+      <Link className={`${s.posterVisual} ${phone ? s.phones : s.wideShot}`} href={href(p)} tabIndex={-1} aria-hidden="true">
+        {phone ? (
+          <>
+            <Shot p={p} i={0} eager={priority} /><Shot p={p} i={3} eager={priority} /><Shot p={p} i={4} eager={priority} />
+          </>
+        ) : (
+          <>
+            <Shot p={p} i={0} eager={priority} /><Shot p={p} i={1} eager={priority} />
+          </>
+        )}
+      </Link>
+    </article>
+  );
+}
+
+/** Tarjeta de laboratorio con acceso directo a la demo. */
+export function LabCard({ p }: { p: Project }) {
+  return (
+    <article className={`panel ${s.lab}`} data-kinds={p.kind.join(' ')}>
+      <Link className={s.labShot} href={href(p)} tabIndex={-1} aria-hidden="true"><Shot p={p} i={0} /></Link>
+      <div className={s.labBody}>
+        <p className="tag">{p.kind.map((k) => kindLabel[k]).join(' · ')}{p.tests ? ` · ${p.tests} pruebas` : ''}</p>
+        <h3 className={s.labName}><Link href={href(p)}>{p.name}</Link></h3>
+        <p className={s.summary}>{p.summary}</p>
+        <ul className={s.stack}>{p.stack.slice(0, 5).map((t) => <li key={t} className="chip">{t}</li>)}</ul>
+        <Links p={p} />
+      </div>
+    </article>
+  );
+}
+
+/** Fila compacta para proyectos de asignatura. */
+export function RowCard({ p }: { p: Project }) {
+  return (
+    <article className={s.row} data-kinds={p.kind.join(' ')}>
+      <Link className={s.thumb} href={href(p)} tabIndex={-1} aria-hidden="true"><Shot p={p} i={0} /></Link>
+      <div className={s.rowBody}>
+        <p className="tag">{p.kind.map((k) => kindLabel[k]).join(' · ')}{p.tests ? ` · ${p.tests} pruebas` : ''}</p>
+        <h3 className={s.rowName}><Link href={href(p)}>{p.name}</Link></h3>
+        <p className={s.summary}>{p.tagline}</p>
+        <ul className={s.stack}>{p.stack.slice(0, 5).map((t) => <li key={t} className="chip">{t}</li>)}</ul>
+      </div>
+      <div className={s.rowLinks}>
+        <Link className="btn btn-primary" href={href(p)} aria-label={`Ver caso de estudio de ${p.name}`}>Ver caso</Link>
+        <a className="btn" href={p.repo} rel="noopener" target="_blank" aria-label={`Repositorio de ${p.name} en GitHub`}>Repositorio</a>
       </div>
     </article>
   );
