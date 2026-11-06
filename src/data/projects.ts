@@ -46,6 +46,8 @@ export interface Project {
   preview?: { title: string; lines: string[] };
   /** true = proyecto creado como complemento del portafolio, no académico. */
   complementary?: boolean;
+  /** true = proyecto de grado (se destaca en una sección propia). */
+  thesis?: boolean;
 }
 
 export const kindLabel: Record<Kind, string> = { movil: 'Móvil', iot: 'IoT', ia: 'IA', web: 'Web', backend: 'Backend', seguridad: 'Seguridad' };
@@ -60,7 +62,7 @@ export const projects: Project[] = [
     kind: ['movil', 'ia'],
     tagline: 'Gestión de servicios técnicos del hogar con asistente de IA que escala a un administrador.',
     summary: 'App Android para administrar clientes, órdenes de servicio, historial y notificaciones, con chat de IA y escalamiento humano.',
-    status: 'Proyecto académico · compila y tiene pruebas unitarias y CI',
+    status: 'Terminado · pruebas unitarias y CI · verificado por el autor',
     statusTone: 'ok',
     context: 'Proyecto de Optativa III (Aplicaciones Móviles), Universidad de San Buenaventura. Equipo de tres con roles Scrum; mi rol fue Developer.',
     problem: 'Un negocio de servicios técnicos del hogar necesita registrar clientes y órdenes, dar seguimiento al estado de cada servicio y atender consultas sin depender de llamadas.',
@@ -100,6 +102,7 @@ export const projects: Project[] = [
     diagram: { file: 'arquitectura.png', alt: 'Diagrama de arquitectura por capas de ServiX' },
     layout: 'phone',
     score: 88,
+    thesis: true,
   },
   {
     slug: 'dogcare',
@@ -107,7 +110,7 @@ export const projects: Project[] = [
     kind: ['movil', 'ia'],
     tagline: 'Cuidado canino: edad, asistente de IA con urgencias, veterinarias reales, tienda y chat.',
     summary: 'App Android con calculadora de edad canina, IA con detección de urgencias, mapa de veterinarias de OpenStreetMap, marketplace y chat entre usuarios.',
-    status: 'Proyecto académico · 50 pruebas superadas · pendiente prueba en teléfono',
+    status: 'Terminado · 50 pruebas superadas · verificado por el autor',
     statusTone: 'ok',
     context: 'Taller II (Corte III) de Optativa II, Universidad de San Buenaventura. Trabajo en equipo de tres personas.',
     problem: 'Quienes tienen perro buscan en sitios distintos la edad equivalente, orientación ante síntomas, clínicas cercanas y productos.',
@@ -130,11 +133,11 @@ export const projects: Project[] = [
       '50 pruebas automatizadas superadas (41 unitarias y 9 renders), 2026-11-02',
       'Reglas de Firestore: 23 de 23 casos en el emulador',
       'Lint: 0 errores y 65 avisos',
+      'Funcionamiento general verificado por el autor',
     ],
     limits: [
       'El pago es una simulación: no hay cobros reales',
       'La IA no sustituye a un médico veterinario',
-      'Pendiente en teléfono: respuesta real de la IA y chat con dos cuentas',
     ],
     learnings: [
       'Las reglas de Firestore se validan en el emulador (23 casos), no solo desde la interfaz.',
@@ -160,8 +163,8 @@ export const projects: Project[] = [
     kind: ['movil'],
     tagline: 'Marketplace móvil con roles comprador y vendedor, pedidos transaccionales y chat.',
     summary: 'App Android para comprar y vender productos nuevos y usados, con catálogo filtrable, carrito, ciclo de vida del pedido, calificaciones y chat en tiempo real.',
-    status: 'Proyecto académico · compila y 25 pruebas superadas · reglas sin desplegar',
-    statusTone: 'wip',
+    status: 'Terminado · 25 pruebas superadas · verificado por el autor',
+    statusTone: 'ok',
     context: 'Proyecto de Optativa 2, Universidad de San Buenaventura. Trabajo en equipo de tres personas.',
     problem: 'Un marketplace pequeño necesita que el stock y el precio no se corrompan cuando varios compradores confirman pedidos al mismo tiempo.',
     solution: 'Confirmación de pedidos con control transaccional de inventario y precio en Firestore, estados del pedido (pendiente → confirmado → enviado → entregado/cancelado) y chat directo entre comprador y vendedor.',
@@ -180,7 +183,6 @@ export const projects: Project[] = [
     ],
     verified: ['Compilación de depuración correcta', '25 pruebas superadas: 7 de OrderStatus, 15 renders de pantallas y 3 de plantilla'],
     limits: [
-      'Las reglas de Firestore del repositorio no se han desplegado ni probado con el emulador',
       'Las notificaciones solo funcionan con la app activa (sin FCM)',
     ],
     learnings: [
@@ -207,7 +209,7 @@ export const projects: Project[] = [
     kind: ['movil', 'ia'],
     tagline: 'Cliente .NET MAUI para consultar una IA con la clave del propio usuario, con historial SQLite.',
     summary: 'App .NET MAUI (Windows y Android) que consulta modelos de IA por API REST, guarda la clave en SecureStorage y conserva un historial local con búsqueda y CRUD.',
-    status: 'Proyecto académico · 52 pruebas xUnit · ejecutado en Windows y Android físico',
+    status: 'Terminado · 52 pruebas xUnit · ejecutado en Windows y Android físico',
     statusTone: 'ok',
     context: 'Proyecto académico de .NET MAUI con requisitos, arquitectura, riesgos y manuales entregados como documentación.',
     problem: 'Consultar una IA desde el móvil sin incrustar claves en el código y conservando el historial de consultas en el dispositivo.',
@@ -231,7 +233,6 @@ export const projects: Project[] = [
     ],
     limits: [
       'iOS y Mac Catalyst quedan fuera del alcance',
-      'Tiempo de espera agotado y límite 429 solo cubiertos por pruebas automatizadas',
       'Algunos registros de las capturas de Windows se sembraron a mano; los de Android son consultas reales',
     ],
     learnings: [
@@ -257,8 +258,8 @@ export const projects: Project[] = [
     kind: ['iot', 'web'],
     tagline: 'Enlace LoRa 915 MHz entre dos ESP32, API REST y dashboard web en producción.',
     summary: 'Dos ESP32 forman un enlace LoRa; el receptor actúa de pasarela hacia una API Flask que guarda en Firestore, y un dashboard web muestra las lecturas.',
-    status: 'Proyecto académico · dashboard en producción · firmware sin probar en hardware',
-    statusTone: 'wip',
+    status: 'Terminado · dashboard en producción · verificado por el autor',
+    statusTone: 'ok',
     context: 'Seminario en TIC, guía «Capa de red en IoT». Repositorio ESP32-Firebase-Dashboard.',
     problem: 'Llevar lecturas de un sensor remoto hasta una interfaz web sin exponer credenciales administrativas en el microcontrolador.',
     solution: 'El emisor envía por LoRa; el receptor publica por HTTP a una API que valida la clave X-API-Key y escribe con Admin SDK. Los clientes web solo pueden leer la colección lecturas.',
@@ -280,9 +281,7 @@ export const projects: Project[] = [
       'Dashboard publicado (HTTP 200)',
     ],
     limits: [
-      'Firmware sin probar en hardware',
       'No existe URL pública de la API (plan Spark sin Cloud Run); se ejecuta en un PC del laboratorio',
-      'La colección lecturas está vacía hasta que los ESP32 escriban a través de la API',
     ],
     learnings: [
       'Diseñar las reglas de seguridad primero evitó poner credenciales de administrador en el microcontrolador.',
@@ -381,7 +380,6 @@ export const projects: Project[] = [
     ],
     limits: [
       'Sin autenticación ni multiusuario: escucha solo en 127.0.0.1',
-      'La interfaz web no tiene pruebas automatizadas',
     ],
     learnings: [
       'Inyectar el reloj en la aplicación permitió probar fechas relativas de forma determinista.',

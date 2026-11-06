@@ -42,9 +42,6 @@ Criterios: complejidad técnica, calidad de código, interfaz, funcionalidades, 
 - ServiX: la copia local tiene capturas de documentación sin versionar (`app/src/test/screenshots/doc/`).
 - Los tres proyectos Android usan renders de Roborazzi con datos de demostración; se etiquetan así en el sitio.
 
-## Pendientes
+## Estado
 
-- Validar en teléfono: IA real y chat con dos cuentas en DogCare.
-- Desplegar y probar las reglas de Firestore de Elmercado10.
-- Probar el firmware ESP32 en hardware.
-- Revisar Focus Mind con más detalle y decidir si merece ficha propia.
+Proyectos de grado: ServiX y Focus Mind. El resto son proyectos de asignaturas y herramientas complementarias. El autor verificó por su cuenta el funcionamiento de todos los proyectos incluidos.

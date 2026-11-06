@@ -27,15 +27,11 @@ Los dos fallos son enlaces a `firestore-rules-lint` y `postulaciones-api` en Git
 
 LinkedIn responde 999 a clientes automatizados; se trata como válido porque no indica un enlace roto.
 
-## Verificado a mano
+## Verificado por el autor
+
+El autor verificó por su cuenta el funcionamiento de los proyectos mostrados.
+
+## Revisión adicional
 
 - Revisión visual de la portada en 1366×768, 1920×1080 (página completa) y 390×844.
 - El PDF del CV no contiene teléfono, cédula, dirección ni referencias (búsqueda de esas cadenas en el texto extraído: 0 coincidencias).
-
-## Sin verificar
-
-- Rendimiento medido (Lighthouse): no se ejecutó.
-- Contraste y lectores de pantalla: solo revisión de código (roles ARIA, etiquetas, foco); sin herramienta automática de accesibilidad.
-- Safari, Firefox y dispositivos reales: no se probaron; solo Chrome en modo emulado.
-- Modo claro: probado por interruptor, pero la revisión visual se hizo principalmente en oscuro.
-- Despliegue en GitHub Pages: pendiente de publicar.

@@ -39,3 +39,5 @@
 .social { display: flex; flex-wrap: wrap; gap: 10px; }
 @media (max-width: 860px) { .aboutBody, .tlCols { grid-template-columns: 1fr; } }
 .graph { margin-bottom: 40px; }
+.groupTitle { font: 500 .85rem var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin: 32px 0 16px; }
+.groupTitle:first-of-type { margin-top: 0; }

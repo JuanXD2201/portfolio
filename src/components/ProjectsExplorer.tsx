@@ -35,11 +35,26 @@ export function ProjectsExplorer() {
             </button>
           ))}
         </div>
-        <div className={s.cards}>
-          {visible.map((p) => (
-            <div key={p.slug}><ProjectCard project={p} index={projects.indexOf(p)} /></div>
-          ))}
-        </div>
+        {visible.some((p) => p.thesis) && (
+          <>
+            <h3 className={s.groupTitle}>Proyectos de grado</h3>
+            <div className={s.cards}>
+              {visible.filter((p) => p.thesis).map((p) => (
+                <div key={p.slug}><ProjectCard project={p} index={projects.indexOf(p)} /></div>
+              ))}
+            </div>
+          </>
+        )}
+        {visible.some((p) => !p.thesis) && (
+          <>
+            <h3 className={s.groupTitle}>Asignaturas y herramientas complementarias</h3>
+            <div className={s.cards}>
+              {visible.filter((p) => !p.thesis).map((p) => (
+                <div key={p.slug}><ProjectCard project={p} index={projects.indexOf(p)} /></div>
+              ))}
+            </div>
+          </>
+        )}
         {visible.length === 0 && <p className={s.muted}>No hay proyectos en esta categoría.</p>}
         <p className={s.muted}>
           Otros repositorios (HTML/CSS, Bootstrap, SQL, Focus Mind) están en <a className={s.link} href={site.github} rel="noopener">GitHub</a>.

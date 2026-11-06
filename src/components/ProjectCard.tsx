@@ -23,6 +23,7 @@ export function ProjectCard({ project: p, index }: { project: Project; index: nu
         <p className={s.meta}>
           <span className={s.idx}>{String(index + 1).padStart(2, '0')}</span>
           {p.kind.map((k) => <span key={k} className="chip">{kindLabel[k]}</span>)}
+          {p.thesis && <span className={s.thesis}>Proyecto de grado</span>}
           {p.complementary && <span className={s.badge}>Complementario</span>}
         </p>
         <h3 className={s.name}><Link href={href}>{p.name}</Link></h3>
