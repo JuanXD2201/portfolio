@@ -1,5 +1,6 @@
 // Fuente única de proyectos. Para agregar uno: añadir un objeto aquí y sus imágenes en raw-assets/projects/<slug>/
 // (luego `npm run build` las optimiza a WebP y regenera images.json).
+// Para un laboratorio con demo: grupo 'lab' + `lab.path` y copiar su build (dist/) a public/labs/<slug>/.
 import manifest from './images.json';
 import { asset } from '../lib/paths';
 
@@ -13,57 +14,63 @@ export function img(slug: string, file: string): Img {
 }
 
 export type Kind = 'movil' | 'iot' | 'ia' | 'web' | 'backend' | 'seguridad';
-export type CaptureKind = 'render' | 'dispositivo' | 'produccion' | 'ninguna';
+export type Group = 'grado' | 'lab' | 'asignatura';
+export type CaptureKind = 'render' | 'dispositivo' | 'produccion' | 'navegador';
 
 export interface Capture { file: string; alt: string; caption: string }
 
 export interface Project {
   slug: string;
   name: string;
+  group: Group;
   kind: Kind[];
   tagline: string;
   summary: string;
   status: string;
-  statusTone: 'ok' | 'wip';
   context: string;
   problem: string;
   solution: string;
   architecture: string[];
   stack: string[];
   features: string[];
-  verified: string[];
-  limits: string[];
+  /** Resultados de pruebas tal como figuran en el README del proyecto. */
+  checks: string[];
+  /** Total de pruebas automatizadas del README (se suma en los indicadores de la portada). */
+  tests?: number;
+  /** «Alcance y decisiones»: hechos redactados en positivo. */
+  scope: string[];
   learnings: string[];
   repo: string;
+  /** Demo externa. */
   demo?: string;
+  /** Demo estática incluida en este sitio: ruta bajo public/. */
+  lab?: { path: string };
   captures: Capture[];
   captureKind: CaptureKind;
   captureNote: string;
   diagram?: { file: string; alt: string };
   layout: 'phone' | 'wide';
-  score: number;
-  /** Vista previa tipo terminal (salida real de comandos) para proyectos sin capturas. */
-  preview?: { title: string; lines: string[] };
-  /** true = proyecto creado como complemento del portafolio, no académico. */
-  complementary?: boolean;
-  /** true = proyecto de grado (se destaca en una sección propia). */
-  thesis?: boolean;
 }
 
 export const kindLabel: Record<Kind, string> = { movil: 'Móvil', iot: 'IoT', ia: 'IA', web: 'Web', backend: 'Backend', seguridad: 'Seguridad' };
 
-const renderNote =
-  'Renders generados con Robolectric + Roborazzi a partir de los Composables reales de la app, con repositorios de demostración y datos ficticios. No son capturas de un dispositivo.';
+export const groupLabel: Record<Group, { title: string; lead: string }> = {
+  grado: { title: 'Proyectos de grado', lead: 'Los dos trabajos con mayor alcance de la carrera.' },
+  lab: { title: 'Laboratorio', lead: 'Proyectos personales con demo ejecutable en el navegador, sin servidor.' },
+  asignatura: { title: 'Proyectos de asignatura', lead: 'Trabajos de curso con repositorio, pruebas y documentación.' },
+};
+
+const renderNote = 'Con datos de demostración.';
 
 export const projects: Project[] = [
   {
     slug: 'servix',
     name: 'ServiX',
+    group: 'grado',
     kind: ['movil', 'ia'],
     tagline: 'Gestión de servicios técnicos del hogar con asistente de IA que escala a un administrador.',
-    summary: 'App Android para administrar clientes, órdenes de servicio, historial y notificaciones, con chat de IA y escalamiento humano.',
-    status: 'Terminado · pruebas unitarias y CI · verificado por el autor',
-    statusTone: 'ok',
+    summary: 'App Android para administrar clientes, órdenes de servicio, historial y notificaciones, con chat de IA y escalamiento a un administrador.',
+    status: 'Terminado · pruebas unitarias y CI',
     context: 'Proyecto de Optativa III (Aplicaciones Móviles), Universidad de San Buenaventura. Equipo de tres con roles Scrum; mi rol fue Developer.',
     problem: 'Un negocio de servicios técnicos del hogar necesita registrar clientes y órdenes, dar seguimiento al estado de cada servicio y atender consultas sin depender de llamadas.',
     solution: 'App con roles de administrador y cliente, órdenes y historial por usuario, notificaciones y un chat con Gemini que responde dudas frecuentes y puede derivar la conversación a un administrador.',
@@ -71,7 +78,7 @@ export const projects: Project[] = [
       'UI (Compose) → ViewModel → UseCase → Repository → Data Source',
       'Firebase Authentication y Cloud Firestore; cada usuario accede solo a su árbol usuarios/{uid}/…',
       'Gemini mediante Firebase AI Logic: no hay claves de IA en el APK',
-      'Webhook de Make opcional para eventos de servicio (URL por local.properties)',
+      'Webhook de Make para eventos de servicio (URL por local.properties)',
       'Azure Pipelines: compila, ejecuta pruebas unitarias y publica el APK debug',
     ],
     stack: ['Kotlin', 'Jetpack Compose', 'Material 3', 'Firebase Auth', 'Firestore', 'Firebase AI Logic', 'Make', 'Azure DevOps'],
@@ -81,8 +88,8 @@ export const projects: Project[] = [
       'Chat con IA y bandeja de escalamientos',
       'Notificaciones y reglas de Firestore por rol',
     ],
-    verified: ['Compilación y pruebas unitarias ejecutadas en CI (Azure Pipelines)', 'Evidencia de Scrum, backlog y pipeline en la documentación'],
-    limits: ['Las capturas son renders, no capturas de dispositivo', 'Integración con Make opcional: sin URL no se envían eventos'],
+    checks: ['Compilación y pruebas unitarias ejecutadas en CI (Azure Pipelines)', 'Scrum, backlog y pipeline documentados'],
+    scope: ['El webhook de Make es configurable: sin URL no se envían eventos', 'La IA se consume desde Firebase AI Logic, sin claves en el APK'],
     learnings: [
       'Los repositorios simulados permiten renderizar y probar las pantallas sin depender de Firebase.',
       'Mover la IA a Firebase AI Logic evita publicar claves en el APK.',
@@ -101,17 +108,167 @@ export const projects: Project[] = [
     captureNote: renderNote,
     diagram: { file: 'arquitectura.png', alt: 'Diagrama de arquitectura por capas de ServiX' },
     layout: 'phone',
-    score: 88,
-    thesis: true,
+  },
+  {
+    slug: 'focus-mind',
+    name: 'Focus Mind',
+    group: 'grado',
+    kind: ['web', 'ia'],
+    tagline: 'Plataforma web de bienestar y productividad con paneles por rol, datos cifrados y actividades con IA.',
+    summary: 'Espacio para concentrarse, relajarse y llevar un registro personal, con quince actividades, flujos de IA con Genkit y Gemini, y paneles de administración, supervisión, análisis y contenido.',
+    status: 'Terminado · 12 pruebas unitarias',
+    context: 'Proyecto de grado de Tecnología en Desarrollo de Software, Universidad de San Buenaventura.',
+    problem: 'Quien busca concentrarse o desconectarse suele repartir tareas, calendario, hábitos y ejercicios de relajación entre varias apps; y quien administra la plataforma necesita ver el uso agregado sin acceder a lo que cada persona escribe.',
+    solution: 'Una aplicación web con lista de enfoque, calendario, diario de gratitud, hábitos y quince actividades de relajación y juego. El texto personal se cifra en el navegador antes de llegar a Firestore, y cinco roles ven solo lo que su panel necesita.',
+    architecture: [
+      'Next.js 15 (App Router) con React y TypeScript; interfaz con Tailwind CSS y shadcn/ui',
+      'Firebase Authentication y Cloud Firestore en tiempo real; el rol vive en users/{uid} y las reglas lo comprueban en el servidor',
+      'Cifrado en el cliente: clave AES-256 derivada con PBKDF2 (SHA-256, 100 000 iteraciones), AES-GCM con IV aleatorio por mensaje',
+      'Flujos de IA con Genkit y Gemini en el servidor: cuento, meditación con audio, juego de imágenes y conexión de palabras',
+      'Panel de análisis con gráficos (Recharts) y exportación de usuarios a Excel',
+    ],
+    stack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'shadcn/ui', 'Firebase Auth', 'Firestore', 'Genkit', 'Gemini', 'Zod', 'Recharts', 'Vitest'],
+    features: [
+      'Cinco roles: usuario, administrador, supervisor, analista de datos y gestor de contenido',
+      'Quince actividades: dibujo, mándala, meditación guiada, memoria, respiración, sonidos, cuentos, Pomodoro, hábitos, puzzle y más',
+      'Lista de enfoque y calendario de eventos por día',
+      'Panel de análisis con conteos globales, crecimiento de usuarios y exportación a Excel',
+      'Tema claro y oscuro, diseño responsive',
+    ],
+    checks: ['12 pruebas unitarias con Vitest sobre los 5 flujos de IA, con el modelo simulado', 'Reglas de Firestore revisadas con linter estático y a mano'],
+    tests: 12,
+    scope: [
+      'El cifrado cubre tareas, títulos de eventos y gratitud; la clave se deriva de la contraseña y no sale del navegador',
+      'Los registros nuevos nacen con rol usuario; solo un administrador cambia roles',
+      'Las actividades de IA requieren una clave de Gemini en el servidor y consumen cuota del servicio',
+      'Sin cuenta de prueba pública: cada persona crea la suya desde el registro',
+    ],
+    learnings: [
+      'El rol debe validarse en el servidor con reglas de Firestore; comprobarlo solo en el cliente no protege los datos.',
+      'Cifrar en el navegador obliga a decidir qué se protege y qué se puede agregar para estadísticas.',
+      'Aislar los flujos de IA en el servidor mantiene la clave fuera del bundle.',
+    ],
+    repo: 'https://github.com/JuanXD2201/focus-mind',
+    captures: [
+      { file: '01-landing.png', alt: 'Página de inicio de Focus Mind en tema oscuro', caption: 'Inicio · tema oscuro' },
+      { file: '04-landing-claro.png', alt: 'Página de inicio de Focus Mind en tema claro', caption: 'Inicio · tema claro' },
+      { file: '02-login.png', alt: 'Formulario de inicio de sesión de Focus Mind', caption: 'Inicio de sesión' },
+      { file: '03-register.png', alt: 'Formulario de registro de Focus Mind', caption: 'Registro' },
+    ],
+    captureKind: 'navegador',
+    captureNote: 'Capturas de las páginas públicas (1280×800). Las pantallas por rol requieren una cuenta de Firebase.',
+    layout: 'wide',
+  },
+  {
+    slug: 'ledger',
+    name: 'Ledger',
+    group: 'lab',
+    kind: ['web'],
+    tagline: 'Finanzas personales que viven en el navegador: cuentas, presupuestos, informes e importación CSV.',
+    summary: 'Registra cuentas y movimientos, fija presupuestos mensuales, importa extractos en CSV y ve a dónde se va el dinero, sin servidor ni cuenta.',
+    status: 'Terminado · demo en el navegador',
+    context: 'Laboratorio personal para practicar arquitectura en el frontend: dominio puro y testeable, almacenamiento intercambiable e interfaz cuidada.',
+    problem: 'Una app de finanzas debe mantener saldos consistentes al editar o borrar movimientos, repetir gastos sin duplicarlos y aceptar extractos con formatos desordenados.',
+    solution: 'El saldo siempre se deriva de los movimientos; las recurrencias son idempotentes; el CSV se valida fila a fila con vista previa y detección de duplicados; el esquema guardado está versionado y se migra al leer.',
+    architecture: [
+      'Tres capas con dependencias en una sola dirección: ui → storage → domain',
+      'Dominio en funciones puras (saldos, presupuestos, recurrencias, CSV, esquema) que se prueba en Node sin DOM',
+      'Repositorio con interfaz LedgerRepository sobre localStorage; cambiar a IndexedDB no toca la interfaz',
+      'Gráficos propios en SVG (dona, barras, tendencia) con lectura por puntero y teclado',
+      'Navegación por hash y base relativa, para publicarse en cualquier subruta estática',
+    ],
+    stack: ['React', 'TypeScript', 'Vite', 'Jest', 'Playwright', 'SVG', 'localStorage'],
+    features: [
+      'Cuentas de efectivo, banco y tarjeta; gastos, ingresos y transferencias',
+      'Movimientos recurrentes semanales o mensuales que respetan el fin de mes',
+      'Presupuestos por categoría con aviso al 80 % y alerta al 100 %',
+      'Informes: gasto por categoría, flujo mensual y tendencia del patrimonio',
+      'Importar y exportar CSV, respaldo JSON validado, atajos de teclado y tema claro/oscuro',
+    ],
+    checks: ['93 pruebas Jest sobre dominio y repositorio (6 archivos)', '22 pruebas e2e con Playwright sobre el build de producción', 'Build de 665 KB (JS 315 KB, 96 KB comprimido)'],
+    tests: 115,
+    scope: [
+      'Moneda única (COP) y montos en pesos enteros, para evitar errores de coma flotante',
+      'Los datos viven solo en el navegador de cada persona; el respaldo JSON permite moverlos',
+      'Proyecto de demostración: no es un producto financiero',
+    ],
+    learnings: [
+      'Derivar los saldos de los movimientos evita inconsistencias al editar o borrar.',
+      'Guardar fechas como texto ISO elimina el desfase de un día por zona horaria.',
+      'Neutralizar celdas que empiezan por = + @ al exportar evita inyección de fórmulas en hojas de cálculo.',
+    ],
+    repo: 'https://github.com/JuanXD2201/ledger',
+    lab: { path: 'labs/ledger/' },
+    captures: [
+      { file: 'panel-escritorio-oscuro.png', alt: 'Panel de Ledger en tema oscuro', caption: 'Panel · oscuro' },
+      { file: 'movimientos-escritorio-claro.png', alt: 'Lista de movimientos de Ledger con filtros', caption: 'Movimientos' },
+      { file: 'presupuestos-escritorio-oscuro.png', alt: 'Presupuestos mensuales con barras de progreso', caption: 'Presupuestos' },
+      { file: 'informes-escritorio-claro.png', alt: 'Informes con dona, barras y tendencia', caption: 'Informes' },
+      { file: 'importacion-escritorio-claro.png', alt: 'Importación de CSV con vista previa', caption: 'Importación CSV' },
+      { file: 'panel-movil.png', alt: 'Panel de Ledger en móvil', caption: 'Panel · móvil' },
+    ],
+    captureKind: 'navegador',
+    captureNote: 'Capturas del propio laboratorio ejecutándose en Chrome, con datos de ejemplo.',
+    layout: 'wide',
+  },
+  {
+    slug: 'injectionlab',
+    name: 'InjectionLab',
+    group: 'lab',
+    kind: ['seguridad', 'web'],
+    tagline: 'Laboratorio para detectar, explotar en un entorno aislado y prevenir la inyección SQL.',
+    summary: 'Cuatro escenarios vulnerables que se ejecutan de verdad sobre SQLite en memoria (WebAssembly), con modo defender, ocho retos y consola SQL.',
+    status: 'Terminado · demo en el navegador',
+    context: 'Laboratorio personal construido después de completar la sala «SQL Injection» de TryHackMe, pensado como herramienta de práctica reutilizable.',
+    problem: 'Entender la inyección SQL exige ver la consulta final, el resultado real y por qué la defensa funciona, sin atacar sistemas ajenos.',
+    solution: 'Una tienda ficticia con SQLite en el navegador (sql.js). Cada escenario muestra la consulta con la entrada resaltada y permite comparar, lado a lado, la versión vulnerable con su corrección: parametrizada, con lista blanca o con mínimo privilegio.',
+    architecture: [
+      'Dominio puro (consultas, sanitizadores, retos, payloads) que no conoce DOM ni sql.js',
+      'El contrato ConsultaConstruida separa la consulta en segmentos fijo, entrada y derivado, para resaltar el origen de cada parte',
+      'Dos bases SQLite en memoria para simular el mínimo privilegio: la pública no contiene las tablas sensibles',
+      'Interfaz con DOM propio y router por hash, sin framework de UI',
+      'Banderas de los retos calculadas con hash y semilla local; no existen como texto en el código',
+    ],
+    stack: ['TypeScript', 'Vite', 'sql.js', 'WebAssembly', 'SQLite', 'Vitest', 'Playwright'],
+    features: [
+      'Cuatro escenarios: elusión de login, UNION SELECT, inyección ciega y ORDER BY',
+      'Modo atacar con pistas y biblioteca de payloads; modo defender con comparación lado a lado',
+      'Ocho retos tipo CTF con puntaje y progreso persistente',
+      'Consola SQL de solo lectura y guía de defensa con ejemplos en Node.js, Kotlin/JDBC y C#/ADO.NET',
+    ],
+    checks: ['93 pruebas Vitest sobre el dominio, incluidas pruebas de explotación contra sql.js en Node', '11 pruebas e2e con Playwright, sin errores de consola'],
+    tests: 104,
+    scope: [
+      'Todo corre en el navegador: sin backend, sin red y sin objetivos reales',
+      'ORDER BY se defiende con lista blanca porque un identificador de columna no se puede enlazar como parámetro',
+      'El mínimo privilegio se demuestra con una segunda base sin tablas sensibles, no con GRANT',
+    ],
+    learnings: [
+      'Construir la consulta como datos permite probar la lógica de inyección sin levantar un motor.',
+      'Ejecutar sobre un motor SQL real muestra errores y resultados auténticos, no texto simulado.',
+    ],
+    repo: 'https://github.com/JuanXD2201/injectionlab',
+    lab: { path: 'labs/injectionlab/' },
+    captures: [
+      { file: '01-inicio.png', alt: 'Inicio de InjectionLab con los cuatro escenarios', caption: 'Inicio' },
+      { file: '02-escenario-login-ataque.png', alt: 'Escenario de inicio de sesión vulnerable', caption: 'Elusión de login' },
+      { file: '03-escenario-busqueda-union.png', alt: 'Escenario de búsqueda con UNION SELECT', caption: 'UNION SELECT' },
+      { file: '06-modo-defender.png', alt: 'Modo defender comparando consulta vulnerable y corregida', caption: 'Modo defender' },
+      { file: '07-retos.png', alt: 'Lista de retos tipo CTF', caption: 'Retos' },
+      { file: '08-consola-sql.png', alt: 'Consola SQL de solo lectura', caption: 'Consola SQL' },
+    ],
+    captureKind: 'navegador',
+    captureNote: 'Capturas del propio laboratorio ejecutándose en Chrome.',
+    layout: 'wide',
   },
   {
     slug: 'dogcare',
     name: 'DogCare',
+    group: 'asignatura',
     kind: ['movil', 'ia'],
     tagline: 'Cuidado canino: edad, asistente de IA con urgencias, veterinarias reales, tienda y chat.',
     summary: 'App Android con calculadora de edad canina, IA con detección de urgencias, mapa de veterinarias de OpenStreetMap, marketplace y chat entre usuarios.',
-    status: 'Terminado · 50 pruebas superadas · verificado por el autor',
-    statusTone: 'ok',
+    status: 'Terminado · 50 pruebas superadas',
     context: 'Taller II (Corte III) de Optativa II, Universidad de San Buenaventura. Trabajo en equipo de tres personas.',
     problem: 'Quienes tienen perro buscan en sitios distintos la edad equivalente, orientación ante síntomas, clínicas cercanas y productos.',
     solution: 'Una sola app que registra los perros, orienta con IA (con tarjeta de urgencia hacia veterinarias y la línea 123), ubica clínicas reales con distancia e indicaciones, y ofrece tienda con carrito y chat.',
@@ -129,19 +286,12 @@ export const projects: Project[] = [
       'Marketplace, carrito y pago simulado',
       'Chat entre usuarios con bloqueo y reporte',
     ],
-    verified: [
-      '50 pruebas automatizadas superadas (41 unitarias y 9 renders), 2026-11-02',
-      'Reglas de Firestore: 23 de 23 casos en el emulador',
-      'Lint: 0 errores y 65 avisos',
-      'Funcionamiento general verificado por el autor',
-    ],
-    limits: [
-      'El pago es una simulación: no hay cobros reales',
-      'La IA no sustituye a un médico veterinario',
-    ],
+    checks: ['50 pruebas automatizadas superadas (41 unitarias y 9 renders)', 'Reglas de Firestore: 23 de 23 casos en el emulador', 'Lint: 0 errores y 65 avisos'],
+    tests: 50,
+    scope: ['El pago es simulado por diseño: no hay cobros reales', 'La IA orienta y no sustituye a un médico veterinario'],
     learnings: [
       'Las reglas de Firestore se validan en el emulador (23 casos), no solo desde la interfaz.',
-      'Combinar dos fuentes (Overpass y Nominatim) exige manejar fallos y datos incompletos de OpenStreetMap.',
+      'Combinar dos fuentes (Overpass y Nominatim) exige manejar fallos y datos parciales de OpenStreetMap.',
     ],
     repo: 'https://github.com/JuanXD2201/DogCare',
     captures: [
@@ -152,22 +302,21 @@ export const projects: Project[] = [
       { file: '07_pago_simulado.png', alt: 'Pantalla de pago simulado', caption: 'Pago simulado' },
     ],
     captureKind: 'render',
-    captureNote: renderNote + ' El mapa no muestra teselas porque el render no tiene red.',
+    captureNote: renderNote + ' El mapa no muestra teselas porque el render se hace sin red.',
     diagram: { file: 'arquitectura.png', alt: 'Diagrama de arquitectura por capas de DogCare' },
     layout: 'phone',
-    score: 90,
   },
   {
     slug: 'elmercado10',
     name: 'Elmercado10',
+    group: 'asignatura',
     kind: ['movil'],
     tagline: 'Marketplace móvil con roles comprador y vendedor, pedidos transaccionales y chat.',
     summary: 'App Android para comprar y vender productos nuevos y usados, con catálogo filtrable, carrito, ciclo de vida del pedido, calificaciones y chat en tiempo real.',
-    status: 'Terminado · 25 pruebas superadas · verificado por el autor',
-    statusTone: 'ok',
+    status: 'Terminado · 25 pruebas superadas',
     context: 'Proyecto de Optativa 2, Universidad de San Buenaventura. Trabajo en equipo de tres personas.',
     problem: 'Un marketplace pequeño necesita que el stock y el precio no se corrompan cuando varios compradores confirman pedidos al mismo tiempo.',
-    solution: 'Confirmación de pedidos con control transaccional de inventario y precio en Firestore, estados del pedido (pendiente → confirmado → enviado → entregado/cancelado) y chat directo entre comprador y vendedor.',
+    solution: 'Confirmación de pedidos con control transaccional de inventario y precio en Firestore, estados del pedido hasta su entrega o cancelación, y chat directo entre comprador y vendedor.',
     architecture: [
       'Tres capas: presentación (Compose, ViewModels, navegación), dominio (modelos e interfaces) y datos (repositorios sobre Firebase)',
       'Sin servidor propio: la seguridad recae en firestore.rules y storage.rules',
@@ -181,13 +330,12 @@ export const projects: Project[] = [
       'Carrito y pedidos con control transaccional',
       'Chat comprador–vendedor y calificaciones de 1 a 5',
     ],
-    verified: ['Compilación de depuración correcta', '25 pruebas superadas: 7 de OrderStatus, 15 renders de pantallas y 3 de plantilla'],
-    limits: [
-      'Las notificaciones solo funcionan con la app activa (sin FCM)',
-    ],
+    checks: ['Compilación de depuración correcta', '25 pruebas superadas: 7 de OrderStatus, 15 renders de pantallas y 3 de plantilla'],
+    tests: 25,
+    scope: ['Las notificaciones funcionan con la app abierta (sin FCM)'],
     learnings: [
       'El stock y el precio se validan de forma transaccional al confirmar un pedido, no en la interfaz.',
-      'Declarar las limitaciones en el README ayuda a priorizar lo que falta antes de publicar.',
+      'Documentar el alcance en el README ayuda a priorizar el trabajo siguiente.',
     ],
     repo: 'https://github.com/JuanXD2201/Elmercado10',
     captures: [
@@ -198,19 +346,18 @@ export const projects: Project[] = [
       { file: '14_chat_detalle.png', alt: 'Chat entre comprador y vendedor', caption: 'Chat' },
     ],
     captureKind: 'render',
-    captureNote: 'Renders de las pantallas reales con datos de demostración (Robolectric y Roborazzi); no provienen de un dispositivo.',
+    captureNote: renderNote,
     diagram: { file: 'arquitectura.png', alt: 'Diagrama de capas de Elmercado10' },
     layout: 'phone',
-    score: 80,
   },
   {
     slug: 'asistenteia',
     name: 'AsistenteIA',
+    group: 'asignatura',
     kind: ['movil', 'ia'],
     tagline: 'Cliente .NET MAUI para consultar una IA con la clave del propio usuario, con historial SQLite.',
     summary: 'App .NET MAUI (Windows y Android) que consulta modelos de IA por API REST, guarda la clave en SecureStorage y conserva un historial local con búsqueda y CRUD.',
-    status: 'Terminado · 52 pruebas xUnit · ejecutado en Windows y Android físico',
-    statusTone: 'ok',
+    status: 'Terminado · 52 pruebas xUnit',
     context: 'Proyecto académico de .NET MAUI con requisitos, arquitectura, riesgos y manuales entregados como documentación.',
     problem: 'Consultar una IA desde el móvil sin incrustar claves en el código y conservando el historial de consultas en el dispositivo.',
     solution: 'La clave la pega el usuario y se guarda con SecureStorage; el proveedor se detecta por prefijo y solo a él se envía la clave. Maneja errores 400/401/403/404/408/429/5xx, timeout y falta de red.',
@@ -226,14 +373,15 @@ export const projects: Project[] = [
       'Historial con CRUD, búsqueda y persistencia tras reiniciar',
       'Manejo explícito de errores HTTP, timeout y sin red',
     ],
-    verified: [
-      '52 pruebas xUnit aprobadas en el entorno de desarrollo (5 en vivo opcionales)',
+    checks: [
+      '52 pruebas xUnit aprobadas (más 5 en vivo opcionales)',
       'Compila para Windows y Android sin errores',
       'Ejecutado en un teléfono físico con Android 15 y en Windows, con capturas',
     ],
-    limits: [
-      'iOS y Mac Catalyst quedan fuera del alcance',
-      'Algunos registros de las capturas de Windows se sembraron a mano; los de Android son consultas reales',
+    tests: 52,
+    scope: [
+      'Plataformas objetivo: Windows y Android; iOS y Mac Catalyst quedan fuera',
+      'Las capturas de Windows usan registros de ejemplo; las de Android son consultas reales',
     ],
     learnings: [
       'Aislar el cliente REST en un proyecto Core permitió probarlo sin interfaz.',
@@ -247,19 +395,18 @@ export const projects: Project[] = [
       { file: 'android_12_modelos_cargados.png', alt: 'Modelos cargados desde la API', caption: 'Modelos (Android)' },
     ],
     captureKind: 'dispositivo',
-    captureNote: 'Capturas tomadas en un teléfono físico con Android 15 durante las pruebas manuales.',
+    captureNote: 'Capturas tomadas en un teléfono físico con Android 15.',
     diagram: { file: 'arquitectura.png', alt: 'Diagrama de arquitectura de AsistenteIA' },
     layout: 'phone',
-    score: 85,
   },
   {
     slug: 'esp32-dashboard',
     name: 'ESP32 · LoRa · Firebase',
-    kind: ['iot', 'web'],
+    group: 'asignatura',
+    kind: ['iot', 'web', 'backend'],
     tagline: 'Enlace LoRa 915 MHz entre dos ESP32, API REST y dashboard web en producción.',
     summary: 'Dos ESP32 forman un enlace LoRa; el receptor actúa de pasarela hacia una API Flask que guarda en Firestore, y un dashboard web muestra las lecturas.',
-    status: 'Terminado · dashboard en producción · verificado por el autor',
-    statusTone: 'ok',
+    status: 'Terminado · dashboard en producción',
     context: 'Seminario en TIC, guía «Capa de red en IoT». Repositorio ESP32-Firebase-Dashboard.',
     problem: 'Llevar lecturas de un sensor remoto hasta una interfaz web sin exponer credenciales administrativas en el microcontrolador.',
     solution: 'El emisor envía por LoRa; el receptor publica por HTTP a una API que valida la clave X-API-Key y escribe con Admin SDK. Los clientes web solo pueden leer la colección lecturas.',
@@ -275,14 +422,9 @@ export const projects: Project[] = [
       'Dashboard con 18 pruebas Vitest, build y despliegue',
       'Reglas de Firestore: lectura pública de lecturas, escritura solo vía API',
     ],
-    verified: [
-      'Extremo a extremo con lecturas simuladas: API → Firestore → dashboard',
-      '30 pruebas pytest y 18 pruebas Vitest superadas',
-      'Dashboard publicado (HTTP 200)',
-    ],
-    limits: [
-      'No existe URL pública de la API (plan Spark sin Cloud Run); se ejecuta en un PC del laboratorio',
-    ],
+    checks: ['Extremo a extremo con lecturas simuladas: API → Firestore → dashboard', '30 pruebas pytest y 18 pruebas Vitest superadas', 'Dashboard publicado (HTTP 200)'],
+    tests: 48,
+    scope: ['La API se ejecuta en un PC del laboratorio (plan Spark, sin Cloud Run)', 'Las credenciales administrativas viven solo en la API, nunca en el microcontrolador'],
     learnings: [
       'Diseñar las reglas de seguridad primero evitó poner credenciales de administrador en el microcontrolador.',
       'Simular lecturas permitió probar la cadena completa sin depender del hardware.',
@@ -293,117 +435,13 @@ export const projects: Project[] = [
       { file: 'dashboard.png', alt: 'Dashboard web de lecturas ESP32 en producción', caption: 'Dashboard en producción' },
     ],
     captureKind: 'produccion',
-    captureNote: 'Captura tomada del dashboard desplegado; sin lecturas reales porque la colección está vacía.',
+    captureNote: 'Captura del dashboard desplegado en Firebase Hosting.',
     layout: 'wide',
-    score: 78,
-  },
-  {
-    slug: 'firestore-rules-lint',
-    name: 'firestore-rules-lint',
-    kind: ['seguridad', 'backend'],
-    tagline: 'CLI en TypeScript que audita firestore.rules y falla en CI si encuentra accesos abiertos.',
-    summary: 'Auditor estático de reglas de Firestore: detecta escrituras sin autenticación, accesos abiertos, comodines recursivos y reglas sin validación.',
-    status: 'Complementario · 11 pruebas Vitest superadas · ejecutado sobre 3 repos propios',
-    statusTone: 'ok',
-    context: 'Proyecto creado para este portafolio (noviembre de 2026) a partir de una necesidad real: revisar las reglas de seguridad de DogCare, ServiX y Elmercado10 de forma repetible.',
-    problem: 'Las reglas de Firestore son la única barrera de seguridad de una app sin servidor propio, y un allow demasiado permisivo pasa inadvertido en una revisión manual.',
-    solution: 'Un CLI que recorre los bloques match anidados, expande las funciones locales y evalúa cada allow contra siete reglas (FR001–FR007). Devuelve texto o JSON y un código de salida configurable con --fail-on para integrarlo en CI.',
-    architecture: [
-      'src/lint.ts: limpieza de comentarios, extracción de funciones y de sentencias allow con su ruta, y motor de reglas',
-      'src/cli.ts: argumentos, salida en texto o JSON y código de salida por severidad',
-      'Sin dependencias en ejecución; TypeScript compilado a dist/ y Vitest para pruebas',
-    ],
-    stack: ['TypeScript', 'Node.js', 'Vitest', 'Firestore Rules', 'CLI'],
-    features: [
-      'Siete reglas con severidad: crítica, alta, media, baja e información',
-      'Expansión de funciones locales antes de evaluar cada condición',
-      'Números de línea correctos aun con comentarios',
-      'Salida JSON y --fail-on para CI',
-    ],
-    verified: [
-      '11 pruebas Vitest superadas, incluidos los falsos positivos encontrados al usarlo',
-      'Ejecutado sobre DogCare, ServiX y Elmercado10: 0 hallazgos críticos o altos',
-    ],
-    limits: [
-      'Análisis por expresiones regulares: no sustituye al emulador de Firestore',
-      'No evalúa funciones con parámetros ni lógica compleja',
-    ],
-    learnings: [
-      'La primera versión marcaba if false y la lectura pública como errores; las pruebas de falsos positivos salieron de usarlo sobre reglas reales.',
-      'Contar líneas sobre el texto sin comentarios, reemplazados por espacios, mantiene los números de línea del archivo original.',
-    ],
-    repo: 'https://github.com/JuanXD2201/firestore-rules-lint',
-    captures: [],
-    captureKind: 'ninguna',
-    captureNote: 'Sin capturas: la vista previa es salida real del CLI sobre las reglas de DogCare.',
-    layout: 'wide',
-    score: 74,
-    complementary: true,
-    preview: {
-      title: '$ firestore-rules-lint firestore.rules --fail-on critical',
-      lines: [
-        'firestore.rules:248  [INFO] FR007  /products/{productId}',
-        '    `allow get, list: if true` es lectura pública. Confirma que los datos no son sensibles.',
-        'firestore.rules:276  [INFO] FR007  /categories/{categoryId}',
-        '',
-        '2 hallazgo(s) · critical: 0  high: 0  medium: 0  low: 0  info: 2',
-      ],
-    },
-  },
-  {
-    slug: 'postulaciones-api',
-    name: 'postulaciones-api',
-    kind: ['backend', 'web'],
-    tagline: 'API REST con Express, SQLite y zod para seguir postulaciones, seguimientos y embudo.',
-    summary: 'API REST con interfaz web mínima para llevar el control de postulaciones laborales: estados, fechas de seguimiento y tasa de avance.',
-    status: 'Complementario · 14 pruebas superadas · API verificada con servidor real',
-    statusTone: 'ok',
-    context: 'Proyecto creado para este portafolio (noviembre de 2026) para cubrir backend con Express y SQL, y resolver una necesidad propia: ordenar la búsqueda laboral.',
-    problem: 'Llevar decenas de postulaciones en hojas de cálculo hace perder fechas de seguimiento y no muestra cuántas avanzan a entrevista.',
-    solution: 'API con CRUD, filtro por estado, estadísticas del embudo y lista de seguimientos vencidos o próximos. La validación es estricta y las consultas están parametrizadas.',
-    architecture: [
-      'src/db.ts: esquema SQLite con restricciones CHECK e índices, y clase Store con consultas parametrizadas',
-      'src/app.ts: rutas Express 5 con validación zod .strict() y manejador de errores central',
-      'public/index.html: interfaz mínima sin frameworks que construye el DOM con textContent (sin innerHTML)',
-      'El reloj se inyecta en createApp para probar los seguimientos sin depender de la fecha actual',
-    ],
-    stack: ['TypeScript', 'Node.js', 'Express 5', 'SQLite', 'zod', 'Vitest'],
-    features: [
-      'CRUD de postulaciones con cinco estados',
-      'GET /api/stats con conteo por estado y tasa de avance',
-      'GET /api/followups con vencidos y próximos de postulaciones activas',
-      'Validación de fechas, URLs y campos desconocidos (400)',
-    ],
-    verified: [
-      '14 pruebas superadas: CRUD, validación, inyección SQL, estadísticas y seguimientos',
-      'Servidor levantado con curl: alta, estadísticas, validación 400 e interfaz en /',
-    ],
-    limits: [
-      'Sin autenticación ni multiusuario: escucha solo en 127.0.0.1',
-    ],
-    learnings: [
-      'Inyectar el reloj en la aplicación permitió probar fechas relativas de forma determinista.',
-      'Resolver la ruta de archivos estáticos con fileURLToPath evita el 404 que produjo una conversión manual en Windows.',
-    ],
-    repo: 'https://github.com/JuanXD2201/postulaciones-api',
-    captures: [],
-    captureKind: 'ninguna',
-    captureNote: 'Sin capturas: la vista previa es salida real de curl contra el servidor en ejecución.',
-    layout: 'wide',
-    score: 72,
-    complementary: true,
-    preview: {
-      title: '$ curl localhost:3917/api/stats',
-      lines: [
-        '{"total":1,"byStatus":{"guardada":0,"postulada":1,',
-        '  "entrevista":0,"oferta":0,"rechazada":0},',
-        ' "submitted":1,"advanceRate":0}',
-        '',
-        '$ curl -X POST /api/applications -d {"role":"x"}',
-        '{"error":"Datos inválidos","details":[{"path":"company",...}]}',
-      ],
-    },
   },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
+export const byGroup = (g: Group) => projects.filter((p) => p.group === g);
+export const labs = projects.filter((p) => p.lab);
+/** URL de la demo incluida en este sitio (o undefined). */
+export const labUrl = (p: Project) => (p.lab ? asset(p.lab.path) : undefined);

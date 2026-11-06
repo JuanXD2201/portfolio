@@ -75,6 +75,70 @@
     "width": 1200,
     "height": 750
   },
+  "focus-mind/01-landing": {
+    "width": 1200,
+    "height": 750
+  },
+  "focus-mind/02-login": {
+    "width": 1200,
+    "height": 750
+  },
+  "focus-mind/03-register": {
+    "width": 1200,
+    "height": 750
+  },
+  "focus-mind/04-landing-claro": {
+    "width": 1200,
+    "height": 750
+  },
+  "injectionlab/01-inicio": {
+    "width": 1200,
+    "height": 750
+  },
+  "injectionlab/02-escenario-login-ataque": {
+    "width": 1200,
+    "height": 750
+  },
+  "injectionlab/03-escenario-busqueda-union": {
+    "width": 1200,
+    "height": 750
+  },
+  "injectionlab/06-modo-defender": {
+    "width": 1200,
+    "height": 750
+  },
+  "injectionlab/07-retos": {
+    "width": 1200,
+    "height": 750
+  },
+  "injectionlab/08-consola-sql": {
+    "width": 1200,
+    "height": 750
+  },
+  "ledger/importacion-escritorio-claro": {
+    "width": 540,
+    "height": 597
+  },
+  "ledger/informes-escritorio-claro": {
+    "width": 1200,
+    "height": 1033
+  },
+  "ledger/movimientos-escritorio-claro": {
+    "width": 1200,
+    "height": 1116
+  },
+  "ledger/panel-escritorio-oscuro": {
+    "width": 540,
+    "height": 720
+  },
+  "ledger/panel-movil": {
+    "width": 540,
+    "height": 1169
+  },
+  "ledger/presupuestos-escritorio-oscuro": {
+    "width": 1200,
+    "height": 887
+  },
   "servix/03_home": {
     "width": 540,
     "height": 1202
