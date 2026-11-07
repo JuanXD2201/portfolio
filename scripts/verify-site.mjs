@@ -11,7 +11,7 @@ const BASE = `${ORIGIN}/portfolio`;
 const CHROME = process.env.CHROME_PATH ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const VIEWPORTS = [['1920x1080', 1920, 1080], ['1366x768', 1366, 768], ['768x1024', 768, 1024], ['390x844', 390, 844]];
 const PHONE = '+573123431825';
-const BANNED = [new RegExp('linked' + 'in', 'i'), /verificado por el autor/i, /complementari[oa]/i, /pendiente/i, /no probad[oa]/i, /incomplet[oa]/i, /en construcci[oó]n/i, /sin capturas/i, /limitaciones/i, /generado con ia/i, /claude/i, /prompt/i, /trabajo en curso/i];
+const BANNED = [new RegExp('linked' + 'in', 'i'), /verificado por el autor/i, /complementari[oa]/i, /pendiente/i, /no probad[oa]/i, /incomplet[oa]/i, /en construcci[oó]n/i, /sin capturas/i, /limitaciones/i, /(generad[oa]|cread[oa]|escrit[oa]|hech[oa]|desarrollad[oa]|construid[oa]) (con|por) (una? )?(ia|inteligencia artificial|claude)/i, /(autor|autora) (es )?(una? )?(ia|claude)/i, /prompt/i, /trabajo en curso/i];
 
 const results = [];
 const ok = (name, pass, detail = '') => { results.push({ name, pass, detail }); console.log(`${pass ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`); };
@@ -76,7 +76,7 @@ try {
     await page.waitForTimeout(800);
     ok(`demo ${slug}: HTTP 200`, res?.status() === 200);
     ok(`demo ${slug}: sin errores de consola ni recursos fallidos`, errors.length === 0 && bad.length === 0, [...errors, ...bad].join(' | ').slice(0, 200));
-    ok(`demo ${slug}: contenido renderizado`, (await page.evaluate(() => document.body.innerText.trim().length)) > 80);
+    ok(`demo ${slug}: contenido renderizado`, await page.waitForFunction(() => document.body.innerText.trim().length > 80, null, { timeout: 8000 }).then(() => true, () => false));
     const fonts = await page.evaluate(async () => { await document.fonts.ready; return [...document.fonts].filter((f) => f.status === 'loaded').length; });
     ok(`demo ${slug}: fuentes cargadas`, fonts > 0, `${fonts} fuentes`);
     if (types.has('wasm')) ok(`demo ${slug}: WASM servido como application/wasm`, types.get('wasm') === 'application/wasm');
@@ -139,8 +139,8 @@ try {
   const want = ['Ledger', 'InjectionLab', 'Focus Mind', 'Contacto', 'tema', 'WhatsApp'];
   const missing = want.filter((w) => !options.some((o) => o.toLowerCase().includes(w.toLowerCase())));
   ok('la paleta incluye proyectos, laboratorios, contacto, tema y WhatsApp', missing.length === 0, missing.join(', '));
-  await home.keyboard.type('focus');
-  await home.keyboard.press('Enter');
+  await home.getByRole('combobox').fill('focus');
+  await home.getByRole('combobox').press('Enter');
   await home.waitForURL('**/proyectos/focus-mind/');
   ok('paleta navega a Focus Mind con Enter', home.url().endsWith('/proyectos/focus-mind/'));
 

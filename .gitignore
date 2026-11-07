@@ -8,3 +8,4 @@ screenshots/
 *.tsbuildinfo
 .DS_Store
 scripts/_*.mjs
+scripts/_*.py
