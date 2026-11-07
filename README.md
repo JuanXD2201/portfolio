@@ -8,7 +8,7 @@ Sitio estático con Next.js 15 (App Router, `output: 'export'`) para GitHub Page
 
 - **Inicio:** núcleo visual que reacciona al puntero, identificación, indicadores (proyectos, laboratorios, tecnologías, pruebas), hora de Bogotá y accesos rápidos.
 - **Sobre mí, Especialidades, Trayectoria:** presentación editorial, mapa radial accesible por teclado (con lista en móvil) y cronología de formación y experiencia seleccionada.
-- **Proyectos:** proyectos de grado (ServiX, Focus Mind), laboratorio (Ledger, InjectionLab) y proyectos de asignatura. Cada uno tiene su caso de estudio en `/proyectos/<slug>/`.
+- **Proyectos:** proyectos de grado (ServiX, Focus Mind), laboratorio (Ledger, InjectionLab, Bodega) y proyectos de asignatura. Cada uno tiene su caso de estudio en `/proyectos/<slug>/`.
 - **Demos:** cada laboratorio se publica compilado en `public/labs/<slug>/` y se abre desde `/labs/<slug>/`.
 - **Contacto:** teléfono, WhatsApp con mensaje prellenado, correo, GitHub y CV, con botones para copiar.
 

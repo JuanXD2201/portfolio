@@ -5,14 +5,14 @@ Solo se registra lo que se ejecutó. Entorno: Windows, Node 25.9, Chrome instala
 | Comprobación | Comando | Resultado |
 |---|---|---|
 | Tipos | `npx tsc --noEmit` | sin errores |
-| Build | `npm run build` | 14 páginas estáticas (portada, 8 casos de estudio, 404, robots, sitemap y rutas internas); 42 imágenes optimizadas |
-| JS de la ruta `/` | salida de `next build` | 124 kB de «First Load JS» (101 kB compartidos + 8,33 kB propios), gzip según Next |
-| Verificación del sitio | `npm test` | 150 de 150 comprobaciones superadas (última ejecución) |
+| Build | `npm run build` | 15 páginas estáticas (portada, 9 casos de estudio, 404, robots, sitemap y rutas internas); 48 imágenes optimizadas |
+| JS de la ruta `/` | salida de `next build` | 125 kB de «First Load JS» (101 kB compartidos + 8,49 kB propios), gzip según Next |
+| Verificación del sitio | `npm test` | 164 de 164 comprobaciones superadas (última ejecución) |
 
 ## Qué cubre `npm test`
 
-- Rutas descubiertas desde `sitemap.xml` (portada y los 8 proyectos) y la 404: estado HTTP, consola sin errores ni peticiones fallidas, imágenes cargadas y con `width`/`height`, un solo `h1`, `title`, `description`, `canonical`, `og:image`, enlaces y botones con nombre accesible, y ausencia de palabras internas o de redes no usadas en el texto y el HTML.
-- Demos de `public/labs/*` (Ledger e InjectionLab): HTTP 200, sin errores de consola ni recursos fallidos, contenido renderizado, fuentes cargadas y WASM servido como `application/wasm`.
+- Rutas descubiertas desde `sitemap.xml` (portada y los 9 proyectos) y la 404: estado HTTP, consola sin errores ni peticiones fallidas, imágenes cargadas y con `width`/`height`, un solo `h1`, `title`, `description`, `canonical`, `og:image`, enlaces y botones con nombre accesible, y ausencia de palabras internas o de redes no usadas en el texto y el HTML.
+- Demos de `public/labs/*` (Ledger, InjectionLab y Bodega): HTTP 200, sin errores de consola ni recursos fallidos, contenido renderizado, fuentes cargadas y WASM servido como `application/wasm`.
 - Portada: enlaces internos y externos, CV, sitemap, robots, `og.png` y favicon; `tel:+573123431825`, `wa.me/573123431825` con mensaje en español, `mailto:`, botones de copiar con confirmación `role="status"` y contenido del portapapeles; descarga del CV; filtros; botones «Abrir demo»; mapa de especialidades con teclado; paleta Ctrl+K (proyectos, laboratorios, contacto, tema y WhatsApp); cambio de tema; «Saltar al contenido»; progreso de lectura; «volver arriba».
 - Responsive en 1920×1080, 1366×768, 768×1024 y 390×844 para la portada y dos casos de estudio: sin scroll horizontal y sin solapamientos entre textos, enlaces y botones; menú móvil.
 - `prefers-reduced-motion`: carga sin errores y con el núcleo dibujado.
@@ -23,14 +23,16 @@ Medido con la API de Performance durante `npm test` (última ejecución):
 
 | Métrica | Valor |
 |---|---|
-| JS transferido en la portada (sin comprimir) | 413 KB |
-| Peso total de la portada sin imágenes diferidas | 705 KB |
-| FCP / LCP | 1000 ms / 1332 ms |
+| JS transferido en la portada (sin comprimir) | 417 KB |
+| Peso total de la portada sin imágenes diferidas | 714 KB |
+| FCP / LCP | 1008 ms / 1724 ms |
 | CLS | 0,000 |
-| Tiempo en tareas largas durante la carga | 254 ms (entre 254 y 512 ms según la ejecución) |
+| Tiempo en tareas largas durante la carga | 353 ms (entre 254 y 512 ms según la ejecución) |
 | Fotogramas por segundo con el núcleo animado | 60,5 |
 
 No se ejecutó Lighthouse. Las cifras de rendimiento provienen de una sola máquina y varían entre ejecuciones.
+
+Las pruebas propias de cada laboratorio (Jest, Vitest, Playwright) se ejecutan en sus repositorios; aquí solo se verifica que sus demos compiladas abran, carguen fuentes y WASM y no produzcan errores de consola. Las cifras de esos repositorios son las de sus README (Bodega: 132 Vitest y 26 e2e).
 
 ## Revisión visual
 

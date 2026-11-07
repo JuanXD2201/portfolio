@@ -7,7 +7,7 @@
 .groupTitle { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
 .groupLead { color: var(--muted); margin: 6px 0 22px; }
 .posters { display: grid; gap: 24px; }
-.labs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 24px; }
+.labs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px; }
 .empty { color: var(--muted); padding: 24px 0; }
 .more { color: var(--muted); font-size: .92rem; }
 .more a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
