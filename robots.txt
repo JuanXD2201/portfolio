@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://juanxd2201.github.io/portfolio/sitemap.xml
