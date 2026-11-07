@@ -38,8 +38,8 @@ export const nav = [
 
 export const about = {
   paragraphs: [
-    'Estoy en quinto semestre de Tecnología en Desarrollo de Software en la Universidad de San Buenaventura (Bogotá). En los últimos semestres he construido seis proyectos de curso y de grado, varios en equipo, y dos laboratorios personales que se ejecutan en el navegador. ServiX se trabajó con roles Scrum y un pipeline de CI en Azure DevOps.',
-    'Mi enfoque es entregar software verificable: arquitectura por capas, reglas de seguridad en Firestore probadas con el emulador, pruebas unitarias, de renderizado y de extremo a extremo, y documentación (SRS, diagramas, manuales) que permite a otra persona continuar el trabajo.',
+    'Estoy en quinto semestre de Tecnología en Desarrollo de Software en la Universidad de San Buenaventura (Bogotá). En los últimos semestres he construido seis proyectos de curso y de grado, varios en equipo, y tres laboratorios personales que se ejecutan en el navegador. ServiX se trabajó con roles Scrum y un pipeline de CI en Azure DevOps.',
+    'Mi enfoque es entregar software verificable: arquitectura por capas, reglas de seguridad en Firestore probadas con el emulador, pruebas unitarias, de renderizado y de extremo a extremo, y documentación (SRS, diagramas, manuales) que permite a otra persona continuar el trabajo. Uso asistentes de IA como herramienta de apoyo: me ayudan a explorar alternativas y a redactar borradores, y yo reviso el código, escribo las pruebas y decido qué entra.',
     'Trabajé como auxiliar de datos en una empresa de gas y energía, registrando y organizando información: sé qué errores de captura le cuestan tiempo a quien usa un sistema.',
   ],
   strengths: [
@@ -92,10 +92,10 @@ export const timeline = {
 export interface Area { id: string; title: string; text: string; techs: string[]; projects: string[] }
 export const areas: Area[] = [
   { id: 'android', title: 'Android nativo', text: 'Kotlin, Jetpack Compose y Material 3, con Firebase como backend y pruebas automatizadas.', techs: ['Kotlin', 'Jetpack Compose', 'Material 3', 'CameraX · Coil', 'OSMDroid'], projects: ['servix', 'dogcare', 'elmercado10'] },
-  { id: 'web', title: 'Web', text: 'Aplicaciones con React y TypeScript, desde plataformas con roles hasta laboratorios que corren sin servidor.', techs: ['TypeScript', 'React · Next.js', 'Tailwind CSS', 'Vite', 'sql.js · WebAssembly'], projects: ['focus-mind', 'ledger', 'injectionlab', 'esp32-dashboard'] },
+  { id: 'web', title: 'Web', text: 'Aplicaciones con React y TypeScript, desde plataformas con roles hasta laboratorios que corren sin servidor.', techs: ['TypeScript', 'React · Next.js', 'Tailwind CSS', 'Vite', 'sql.js · WebAssembly'], projects: ['focus-mind', 'ledger', 'injectionlab', 'bodega', 'esp32-dashboard'] },
   { id: 'maui', title: '.NET MAUI', text: 'Cliente REST, SQLite local, SecureStorage y MVVM; compilado para Windows y Android.', techs: ['.NET MAUI / C#', 'SQLite'], projects: ['asistenteia'] },
   { id: 'ia', title: 'Integración de IA', text: 'Chat con Gemini mediante Firebase AI Logic, flujos con Genkit en el servidor y clientes REST con la clave del usuario.', techs: ['Gemini (Firebase AI Logic)', 'Genkit', 'API Gemini (REST)'], projects: ['servix', 'dogcare', 'asistenteia', 'focus-mind'] },
-  { id: 'datos', title: 'Backend, datos y seguridad', text: 'Modelado en Firestore y SQLite, API REST en Flask, reglas de seguridad y cifrado en el cliente.', techs: ['Cloud Firestore', 'Firebase Authentication', 'Python · Flask', 'MySQL · SQL Server', 'APIs REST · Webhooks'], projects: ['focus-mind', 'dogcare', 'esp32-dashboard', 'injectionlab'] },
+  { id: 'datos', title: 'Backend, datos y seguridad', text: 'Modelado en Firestore y SQLite, API REST en Flask, reglas de seguridad y cifrado en el cliente.', techs: ['Cloud Firestore', 'Firebase Authentication', 'Python · Flask', 'MySQL · SQL Server', 'Triggers · vistas · índices (SQL)', 'APIs REST · Webhooks'], projects: ['focus-mind', 'dogcare', 'esp32-dashboard', 'injectionlab', 'bodega'] },
   { id: 'iot', title: 'IoT y dashboards', text: 'Enlace LoRa/BLE con ESP32, pasarela a API y panel web con lecturas.', techs: ['Arduino / C++ (ESP32)', 'Firebase Hosting'], projects: ['esp32-dashboard'] },
-  { id: 'calidad', title: 'Pruebas y documentación', text: 'Pruebas unitarias, de renderizado y e2e; SRS, diagramas de arquitectura y manuales técnicos.', techs: ['JUnit · Robolectric · Roborazzi', 'xUnit', 'Vitest · pytest', 'Jest', 'Playwright', 'Draw.io · UML'], projects: ['servix', 'dogcare', 'ledger', 'injectionlab'] },
+  { id: 'calidad', title: 'Pruebas y documentación', text: 'Pruebas unitarias, de renderizado y e2e; SRS, diagramas de arquitectura y manuales técnicos.', techs: ['JUnit · Robolectric · Roborazzi', 'xUnit', 'Vitest · pytest', 'Jest', 'Playwright', 'Draw.io · UML'], projects: ['servix', 'dogcare', 'ledger', 'injectionlab', 'bodega'] },
 ];

@@ -23,6 +23,30 @@
     "width": 1200,
     "height": 431
   },
+  "bodega/consola-sql-1440": {
+    "width": 1200,
+    "height": 750
+  },
+  "bodega/existencias-traslado-1440": {
+    "width": 1200,
+    "height": 750
+  },
+  "bodega/panel-1440": {
+    "width": 1200,
+    "height": 750
+  },
+  "bodega/pedido-390": {
+    "width": 540,
+    "height": 1169
+  },
+  "bodega/productos-1440": {
+    "width": 1200,
+    "height": 750
+  },
+  "bodega/reportes-ventas-1440": {
+    "width": 1200,
+    "height": 750
+  },
   "dogcare/02_calculadora_edad": {
     "width": 540,
     "height": 1202
