@@ -45,9 +45,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <p className={s.lead}>{p.tagline}</p>
         <p className={s.status}><span className={s.dot} aria-hidden="true" />{p.status}</p>
         <div className={s.cta}>
-          {demo && <a className="btn btn-primary" href={demo}>Abrir demo</a>}
+          {demo && <a className="btn btn-primary" href={demo}>Abrir aplicación</a>}
           <a className={demo ? 'btn' : 'btn btn-primary'} href={p.repo} rel="noopener" target="_blank">Ver repositorio</a>
-          {p.demo && <a className="btn" href={p.demo} rel="noopener" target="_blank">Abrir demo en línea</a>}
+          {p.demo && <a className="btn" href={p.demo} rel="noopener" target="_blank">Abrir en línea</a>}
         </div>
       </header>
 

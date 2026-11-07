@@ -14,7 +14,7 @@ const coreLabels = [`${projects.length} proyectos`, `${techCount} tecnologías`,
 /** Indicadores derivados de los datos: cambian solos al añadir proyectos o tecnologías. */
 const metrics = [
   { value: projects.length, label: 'Proyectos documentados' },
-  { value: labs.length, label: 'Laboratorios con demo' },
+  { value: labs.length, label: 'Aplicaciones instalables' },
   { value: techCount, label: 'Tecnologías con respaldo' },
   { value: testCount, label: 'Pruebas automatizadas' },
 ];
@@ -69,7 +69,7 @@ export function Hero() {
           <BogotaClock />
           <p className={s.avail}><span className={s.dot} aria-hidden="true" />{site.availability}</p>
           <ul className={s.quick} aria-label="Accesos rápidos">
-            {labs.map((l) => <li key={l.slug}><a href={labUrl(l)}>Demo · {l.name}</a></li>)}
+            {labs.map((l) => <li key={l.slug}><a href={labUrl(l)}>{l.name}</a></li>)}
             <li><a href={asset(site.cvFile)} download>Hoja de vida (PDF)</a></li>
             <li><Link href="/#proyectos">Explorar proyectos</Link></li>
           </ul>

@@ -16,10 +16,10 @@ function Links({ p }: { p: Project }) {
   const demo = labUrl(p);
   return (
     <div className={s.links}>
-      {demo && <a className="btn btn-primary" href={demo} aria-label={`Abrir demo de ${p.name}`}>Abrir demo</a>}
+      {demo && <a className="btn btn-primary" href={demo} aria-label={`Abrir ${p.name}`}>Abrir aplicación</a>}
       <Link className={demo ? 'btn' : 'btn btn-primary'} href={href(p)} aria-label={`Ver caso de estudio de ${p.name}`}>Ver caso</Link>
       <a className="btn" href={p.repo} rel="noopener" target="_blank" aria-label={`Repositorio de ${p.name} en GitHub`}>Repositorio</a>
-      {p.demo && <a className="btn" href={p.demo} rel="noopener" target="_blank" aria-label={`Demo en línea de ${p.name}`}>Demo en línea</a>}
+      {p.demo && <a className="btn" href={p.demo} rel="noopener" target="_blank" aria-label={`Abrir en línea ${p.name}`}>Abrir en línea</a>}
     </div>
   );
 }
@@ -53,7 +53,7 @@ export function PosterCard({ p, priority }: { p: Project; priority?: boolean }) 
   );
 }
 
-/** Tarjeta de laboratorio con acceso directo a la demo. */
+/** Tarjeta de laboratorio con acceso directo a la aplicación. */
 export function LabCard({ p }: { p: Project }) {
   return (
     <article className={`panel ${s.lab}`} data-kinds={p.kind.join(' ')}>

@@ -35,14 +35,14 @@ Todo el contenido está en `src/data/`. Después de cualquier cambio: `npm run t
 
 Los números de pruebas deben coincidir con los del README del proyecto. Las capturas renderizadas se describen con la nota «Pantallas renderizadas desde el código de la app».
 
-## Laboratorios y demos
+## Laboratorios
 
 Para un laboratorio nuevo (por ejemplo `bodega`):
 
 1. En la carpeta del laboratorio: `npm ci` (si hace falta) y `npm run build`. Debe usar `base: './'`.
-2. Copia `dist/` a `public/labs/<slug>/` (las demos se versionan; el despliegue no compila nada más).
-3. Agrega la entrada en `projects.ts` con `group: 'lab'` y `lab: { path: 'labs/<slug>/' }`; el botón «Abrir demo», la paleta y los accesos rápidos de la portada se actualizan solos.
-4. Para actualizar una demo existente, repite los pasos 1 y 2 con la carpeta del mismo `slug`.
+2. Copia `dist/` a `public/labs/<slug>/` (las compilaciones se versionan; el despliegue no compila nada más).
+3. Agrega la entrada en `projects.ts` con `group: 'lab'` y `lab: { path: 'labs/<slug>/' }`; el botón «Abrir aplicación», la paleta y los accesos rápidos de la portada se actualizan solos.
+4. Para actualizar una aplicación existente, repite los pasos 1 y 2 con la carpeta del mismo `slug`.
 5. `npm test` abre cada carpeta de `public/labs/` y comprueba consola, fuentes y WASM.
 
 ## Imágenes e imagen social

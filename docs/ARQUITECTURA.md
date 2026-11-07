@@ -20,7 +20,7 @@ src/
   lib/paths.ts            asset() y route(): respetan el basePath
   styles/global.css       tokens y utilidades
 raw-assets/projects/      imágenes originales por proyecto
-public/                   favicon, og.png, CV, projects/ (WebP generados) y labs/ (demos compiladas)
+public/                   favicon, og.png, CV, projects/ (WebP generados) y labs/ (aplicaciones compiladas)
 scripts/                  optimize-images, make-assets, serve, verify-site, deploy-pages
 docs/                     esta documentación
 ```
@@ -38,7 +38,7 @@ docs/                     esta documentación
 
 ## Laboratorios
 
-Cada laboratorio es un proyecto Vite independiente con `base: './'`. Su `dist/` se copia a `public/labs/<slug>/` y Next lo exporta tal cual. El botón «Abrir demo» enlaza a `asset('labs/<slug>/')`. `scripts/serve.mjs` sirve `.wasm` con el tipo correcto (necesario para InjectionLab).
+Cada laboratorio es un proyecto Vite independiente con `base: './'`. Su `dist/` se copia a `public/labs/<slug>/` y Next lo exporta tal cual. El botón «Abrir aplicación» enlaza a `asset('labs/<slug>/')`. `scripts/serve.mjs` sirve `.wasm` con el tipo correcto (necesario para InjectionLab).
 
 ## Portada
 

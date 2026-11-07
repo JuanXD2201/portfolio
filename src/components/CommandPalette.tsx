@@ -27,7 +27,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
     return [
       ...nav.map((n) => ({ label: n.label, hint: 'Ir a sección', run: go(`/${n.href}`) })),
       ...projects.map((p) => ({ label: p.name, hint: groupLabel[p.group].title.replace('Proyectos de ', 'Proyecto de '), run: go(`/proyectos/${p.slug}/`) })),
-      ...labs.map((p) => ({ label: `Demo de ${p.name}`, hint: 'Laboratorio', run: () => { location.href = labUrl(p)!; } })),
+      ...labs.map((p) => ({ label: `Abrir ${p.name}`, hint: 'Laboratorio', run: () => { location.href = labUrl(p)!; } })),
       { label: 'Contacto por WhatsApp', hint: site.phoneDisplay, run: ext(whatsappLink) },
       { label: 'Llamar', hint: site.phoneDisplay, run: () => { location.href = `tel:${site.phone}`; } },
       { label: 'Escribir correo', hint: site.email, run: () => { location.href = `mailto:${site.email}`; } },

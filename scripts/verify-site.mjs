@@ -1,4 +1,4 @@
-// Auditoría automática del sitio exportado (out/): rutas, demos de laboratorios, consola, imágenes, enlaces,
+// Auditoría automática del sitio exportado (out/): rutas, aplicaciones de laboratorios, consola, imágenes, enlaces,
 // contacto, texto prohibido, responsive (sin scroll horizontal ni solapamientos), teclado, paleta y rendimiento.
 // Uso: npm run build && npm test
 import { chromium } from 'playwright-core';
@@ -65,7 +65,7 @@ try {
     await page.close();
   }
 
-  // 2) Demos de laboratorios: abren, cargan fuentes y WASM, sin errores
+  // 2) Aplicaciones de laboratorios: abren, cargan fuentes y WASM, sin errores
   for (const slug of labs) {
     const page = await ctx.newPage();
     const errors = []; const bad = []; const types = new Map();
@@ -74,13 +74,13 @@ try {
     page.on('response', (r) => { if (r.status() >= 400) bad.push(`${r.status()} ${r.url()}`); types.set(r.url().split('?')[0].split('.').pop(), r.headers()['content-type']); });
     const res = await page.goto(`${BASE}/labs/${slug}/`, { waitUntil: 'networkidle' });
     await page.waitForTimeout(800);
-    ok(`demo ${slug}: HTTP 200`, res?.status() === 200);
-    ok(`demo ${slug}: sin errores de consola ni recursos fallidos`, errors.length === 0 && bad.length === 0, [...errors, ...bad].join(' | ').slice(0, 200));
-    ok(`demo ${slug}: contenido renderizado`, await page.waitForFunction(() => document.body.innerText.trim().length > 80, null, { timeout: 8000 }).then(() => true, () => false));
+    ok(`app ${slug}: HTTP 200`, res?.status() === 200);
+    ok(`app ${slug}: sin errores de consola ni recursos fallidos`, errors.length === 0 && bad.length === 0, [...errors, ...bad].join(' | ').slice(0, 200));
+    ok(`app ${slug}: contenido renderizado`, await page.waitForFunction(() => document.body.innerText.trim().length > 80, null, { timeout: 8000 }).then(() => true, () => false));
     const fonts = await page.evaluate(async () => { await document.fonts.ready; return [...document.fonts].filter((f) => f.status === 'loaded').length; });
-    ok(`demo ${slug}: fuentes cargadas`, fonts > 0, `${fonts} fuentes`);
-    if (types.has('wasm')) ok(`demo ${slug}: WASM servido como application/wasm`, types.get('wasm') === 'application/wasm');
-    await page.screenshot({ path: `screenshots/demo-${slug}.png` });
+    ok(`app ${slug}: fuentes cargadas`, fonts > 0, `${fonts} fuentes`);
+    if (types.has('wasm')) ok(`app ${slug}: WASM servido como application/wasm`, types.get('wasm') === 'application/wasm');
+    await page.screenshot({ path: `screenshots/app-${slug}.png` });
     await page.close();
   }
 
@@ -123,7 +123,7 @@ try {
   ok('filtro Seguridad deja 1 proyecto', (await cards()) === 1);
   await home.locator('#proyectos button', { hasText: 'Todos' }).click();
   ok(`filtro Todos muestra los ${pages.filter((p) => p.startsWith('/proyectos/')).length} proyectos`, total === pages.filter((p) => p.startsWith('/proyectos/')).length && (await cards()) === total);
-  ok('«Abrir demo» enlaza a cada laboratorio', (await home.locator('#proyectos a', { hasText: 'Abrir demo' }).evaluateAll((as) => as.map((a) => a.getAttribute('href')))).length === labs.length);
+  ok('«Abrir aplicación» enlaza a cada laboratorio', (await home.locator('#proyectos a', { hasText: 'Abrir aplicación' }).evaluateAll((as) => as.map((a) => a.getAttribute('href')))).length === labs.length);
 
   // Mapa de especialidades por teclado
   await home.locator('#area-ia').focus();

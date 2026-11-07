@@ -1,6 +1,6 @@
 // Fuente única de proyectos. Para agregar uno: añadir un objeto aquí y sus imágenes en raw-assets/projects/<slug>/
 // (luego `npm run build` las optimiza a WebP y regenera images.json).
-// Para un laboratorio con demo: grupo 'lab' + `lab.path` y copiar su build (dist/) a public/labs/<slug>/.
+// Para un laboratorio: grupo 'lab' + `lab.path` y copiar su build (dist/) a public/labs/<slug>/.
 import manifest from './images.json';
 import { asset } from '../lib/paths';
 
@@ -56,7 +56,7 @@ export const kindLabel: Record<Kind, string> = { movil: 'Móvil', iot: 'IoT', ia
 
 export const groupLabel: Record<Group, { title: string; lead: string }> = {
   grado: { title: 'Proyectos de grado', lead: 'Los dos trabajos con mayor alcance de la carrera.' },
-  lab: { title: 'Laboratorio', lead: 'Proyectos personales con demo ejecutable en el navegador, sin servidor.' },
+  lab: { title: 'Laboratorio', lead: 'Aplicaciones completas que se instalan como PWA, funcionan sin conexión y guardan los datos en el dispositivo.' },
   asignatura: { title: 'Proyectos de asignatura', lead: 'Trabajos de curso con repositorio, pruebas y documentación.' },
 };
 
@@ -166,7 +166,7 @@ export const projects: Project[] = [
     kind: ['web'],
     tagline: 'Finanzas personales que viven en el navegador: cuentas, presupuestos, informes e importación CSV.',
     summary: 'Registra cuentas y movimientos, fija presupuestos mensuales, importa extractos en CSV y ve a dónde se va el dinero, sin servidor ni cuenta.',
-    status: 'Terminado · demo en el navegador',
+    status: 'Terminado · aplicación instalable y sin conexión',
     context: 'Laboratorio personal para practicar arquitectura en el frontend: dominio puro y testeable, almacenamiento intercambiable e interfaz cuidada.',
     problem: 'Una app de finanzas debe mantener saldos consistentes al editar o borrar movimientos, repetir gastos sin duplicarlos y aceptar extractos con formatos desordenados.',
     solution: 'El saldo siempre se deriva de los movimientos; las recurrencias son idempotentes; el CSV se valida fila a fila con vista previa y detección de duplicados; el esquema guardado está versionado y se migra al leer.',
@@ -185,12 +185,12 @@ export const projects: Project[] = [
       'Informes: gasto por categoría, flujo mensual y tendencia del patrimonio',
       'Importar y exportar CSV, respaldo JSON validado, atajos de teclado y tema claro/oscuro',
     ],
-    checks: ['93 pruebas Jest sobre dominio y repositorio (6 archivos)', '22 pruebas e2e con Playwright sobre el build de producción', 'Build de 665 KB (JS 315 KB, 96 KB comprimido)'],
-    tests: 115,
+    checks: ['104 pruebas Jest sobre dominio y repositorio (7 archivos)', '33 pruebas e2e con Playwright sobre el build de producción, incluido el modo sin conexión', 'PWA instalable con service worker y caché versionada'],
+    tests: 137,
     scope: [
       'Moneda única (COP) y montos en pesos enteros, para evitar errores de coma flotante',
       'Los datos viven solo en el navegador de cada persona; el respaldo JSON permite moverlos',
-      'Proyecto de demostración: no es un producto financiero',
+      'Pensado para uso personal; no sustituye a un software contable',
     ],
     learnings: [
       'Derivar los saldos de los movimientos evita inconsistencias al editar o borrar.',
@@ -218,7 +218,7 @@ export const projects: Project[] = [
     kind: ['seguridad', 'web'],
     tagline: 'Laboratorio para detectar, explotar en un entorno aislado y prevenir la inyección SQL.',
     summary: 'Cuatro escenarios vulnerables que se ejecutan de verdad sobre SQLite en memoria (WebAssembly), con modo defender, ocho retos y consola SQL.',
-    status: 'Terminado · demo en el navegador',
+    status: 'Terminado · aplicación instalable y sin conexión',
     context: 'Laboratorio personal construido después de completar la sala «SQL Injection» de TryHackMe, pensado como herramienta de práctica reutilizable.',
     problem: 'Entender la inyección SQL exige ver la consulta final, el resultado real y por qué la defensa funciona, sin atacar sistemas ajenos.',
     solution: 'Una tienda ficticia con SQLite en el navegador (sql.js). Cada escenario muestra la consulta con la entrada resaltada y permite comparar, lado a lado, la versión vulnerable con su corrección: parametrizada, con lista blanca o con mínimo privilegio.',
@@ -236,8 +236,8 @@ export const projects: Project[] = [
       'Ocho retos tipo CTF con puntaje y progreso persistente',
       'Consola SQL de solo lectura y guía de defensa con ejemplos en Node.js, Kotlin/JDBC y C#/ADO.NET',
     ],
-    checks: ['93 pruebas Vitest sobre el dominio, incluidas pruebas de explotación contra sql.js en Node', '11 pruebas e2e con Playwright, sin errores de consola'],
-    tests: 104,
+    checks: ['120 pruebas Vitest sobre el dominio, incluidas pruebas de explotación contra sql.js en Node', '25 pruebas e2e con Playwright, sin errores de consola, con modo sin conexión'],
+    tests: 145,
     scope: [
       'Todo corre en el navegador: sin backend, sin red y sin objetivos reales',
       'ORDER BY se defiende con lista blanca porque un identificador de columna no se puede enlazar como parámetro',
@@ -268,7 +268,7 @@ export const projects: Project[] = [
     kind: ['web', 'backend'],
     tagline: 'Inventario, compras y pedidos para una distribuidora, con una base SQLite real en el navegador.',
     summary: 'Gestión de productos, existencias por bodega, pedidos de venta, compras y auditoría sobre SQLite en WebAssembly: 16 tablas, 9 vistas y 25 triggers, con tres roles y consola SQL de solo lectura.',
-    status: 'Terminado · demo en el navegador',
+    status: 'Terminado · aplicación instalable y sin conexión',
     context: 'Laboratorio personal cuyo centro es la base de datos: el modelo relacional, sus restricciones y triggers, con una aplicación de negocio construida encima.',
     problem: 'Un inventario se corrompe cuando el stock cambia desde varios sitios o cuando un pedido se confirma a medias. Las reglas deben sostenerse aunque falle la interfaz.',
     solution: 'Las existencias solo cambian al insertar movimientos; pedidos, recepciones, traslados y ajustes los generan mediante triggers. Confirmar un pedido es todo o nada: si una línea no tiene stock, la base revierte el pedido completo. El dominio valida antes para dar mensajes claros y los triggers son la defensa final.',
@@ -289,15 +289,15 @@ export const projects: Project[] = [
       'Scripts de esquema y datos para SQLite, MySQL y SQL Server',
     ],
     checks: [
-      '132 pruebas Vitest en 4 archivos sobre la base SQLite real en memoria (restricciones, triggers, permisos, CSV, semilla)',
-      '26 pruebas e2e con Playwright, con fallo ante cualquier error de consola',
-      'Build de 1,4 MB, con el motor WASM y las fuentes autoalojadas',
+      '157 pruebas Vitest en 5 archivos sobre la base SQLite real en memoria (restricciones, triggers, permisos, CSV, semilla)',
+      '40 pruebas e2e con Playwright, con fallo ante cualquier error de consola',
+      'Build de 1,5 MB, con el motor WASM y las fuentes autoalojadas',
     ],
-    tests: 158,
+    tests: 197,
     scope: [
       'Todo corre en el navegador: sin servidor, sin cuentas y sin peticiones a terceros',
       'Los scripts de MySQL y SQL Server son equivalentes de esquema y datos escritos a mano; su contenido se comprueba con pruebas automáticas',
-      'Los usuarios son de demostración y sirven para mostrar los roles; no hay autenticación',
+      'Perfiles locales con PIN opcional (PBKDF2): separan roles en un mismo dispositivo, no sustituyen una autenticación de servidor',
       'Un usuario a la vez por navegador; el respaldo es la exportación .sqlite',
     ],
     learnings: [

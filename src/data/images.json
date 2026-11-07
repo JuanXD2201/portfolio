@@ -144,8 +144,8 @@
     "height": 597
   },
   "ledger/informes-escritorio-claro": {
-    "width": 1200,
-    "height": 1033
+    "width": 540,
+    "height": 651
   },
   "ledger/movimientos-escritorio-claro": {
     "width": 1200,
@@ -161,7 +161,7 @@
   },
   "ledger/presupuestos-escritorio-oscuro": {
     "width": 1200,
-    "height": 887
+    "height": 935
   },
   "servix/03_home": {
     "width": 540,
